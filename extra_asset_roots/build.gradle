@@ -1,0 +1,22 @@
+// modA/build.gradle
+plugins {
+    id "com.azuredoom.hytale-tools"
+}
+
+dependencies {
+    implementation project(":common")
+    implementation project(":renode")
+}
+
+hytaleTools {
+    modId = "Extra_Worldgen_Asset_Roots"
+    version = getProperty("extra_asset_roots.version")
+    mainClass = "io.github.itsverday.extraassetroots.ExtraAssetRootsPlugin"
+    manifestDependencies = ""
+    manifestOptionalDependencies = "Verday:Renode=" + getProperty("renode.version")
+    modDescription = "Adds missing asset directories/node editor asset roots for Worldgen v2 assets."
+    modCredits = "Verday"
+    modUrl = "https://github.com/ItsVerday/Hytale_Worldgen_Mods"
+
+    bundleAssetEditorRuntime = false
+}

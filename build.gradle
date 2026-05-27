@@ -1,0 +1,18 @@
+plugins {
+    id "java"
+    id "com.azuredoom.hytale-workspace" version "1.0.32"
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = "io.github.itsverday"
+
+hytaleWorkspace {
+    modProjects = [":renode", ":carta", ":extra_asset_roots"]
+
+    manifestGroup = "Verday"
+    hytaleVersion = getProperty("hytale.version")
+    patchline = getProperty("hytale.patchline")
+}

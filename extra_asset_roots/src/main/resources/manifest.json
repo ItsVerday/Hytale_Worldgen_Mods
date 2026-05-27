@@ -1,0 +1,25 @@
+{
+    "Group": "Verday",
+    "Name": "Extra_Worldgen_Asset_Roots",
+    "Version": "0.1.0",
+    "Description": "Adds missing asset directories/node editor asset roots for Worldgen v2 assets.",
+    "Authors": [
+        {
+            "Name": "Verday"
+        }
+    ],
+    "Website": "https://github.com/ItsVerday/Hytale_Worldgen_Mods",
+    "ServerVersion": ">=0.5.1",
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        "Verday:Renode": "0.6.0"
+    },
+    "DisabledByDefault": false,
+    "Main": "io.github.itsverday.extraassetroots.ExtraAssetRootsPlugin",
+    "IncludesAssetPack": false,
+    "UpdateChecker": {
+        "CurseForge": ""
+    }
+}

@@ -1,0 +1,4 @@
+// common/build.gradle
+plugins {
+    id "java-library"
+}

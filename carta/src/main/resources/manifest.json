@@ -1,0 +1,25 @@
+{
+    "Group": "Verday",
+    "Name": "Carta",
+    "Version": "0.2.0",
+    "Description": "Adds a flexible Biome placement system for Worldgen v2.",
+    "Authors": [
+        {
+            "Name": "Verday"
+        }
+    ],
+    "Website": "https://github.com/ItsVerday/Hytale_Worldgen_Mods",
+    "ServerVersion": ">=0.5.1",
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        "Verday:Renode": "0.6.0"
+    },
+    "DisabledByDefault": false,
+    "Main": "io.github.itsverday.carta.CartaPlugin",
+    "IncludesAssetPack": false,
+    "UpdateChecker": {
+        "CurseForge": ""
+    }
+}

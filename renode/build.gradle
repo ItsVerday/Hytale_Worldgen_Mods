@@ -1,0 +1,20 @@
+// modA/build.gradle
+plugins {
+    id "com.azuredoom.hytale-tools"
+}
+
+dependencies {
+    implementation project(":common")
+}
+
+hytaleTools {
+    modId = "Renode"
+    version = getProperty("renode.version")
+    mainClass = "io.github.itsverday.renode.RenodePlugin"
+    manifestDependencies = ""
+    modDescription = "Plugin/Library to perform automatic node config generation for the Asset Node Editor."
+    modCredits = "Verday"
+    modUrl = "https://github.com/ItsVerday/Hytale_Worldgen_Mods"
+
+    bundleAssetEditorRuntime = false
+}

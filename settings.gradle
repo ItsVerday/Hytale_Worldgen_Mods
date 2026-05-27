@@ -1,0 +1,1 @@
+include("common", "renode", "carta", "extra_asset_roots")
