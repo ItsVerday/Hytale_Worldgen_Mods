@@ -10,6 +10,7 @@ import io.github.itsverday.renode.definition.BsonEncodable;
 import org.bson.*;
 import org.bson.json.JsonWriterSettings;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -167,23 +168,21 @@ public class NodeWorkspace extends BsonEncodable {
         return document;
     }
 
-    public int getConfigs(BiFunction<String, String, Boolean> configConsumer) {
+    public HashMap<String, String> getConfigs() {
+        return getConfigs(JsonWriterSettings.builder().indent(true).build());
+    }
+
+    public HashMap<String, String> getConfigs(JsonWriterSettings settings) {
         for (NodeBuilder node: getNodes()) {
             node.preBuild();
         }
 
-        JsonWriterSettings settings = JsonWriterSettings.builder().indent(true).build();
-        int counter = 0;
-        if (configConsumer.apply(String.format("%s/_Workspace.json", getWorkspaceId()), encodeAsDocument().toJson(settings))) {
-            counter++;
-        }
-
+        HashMap<String, String> configs = new HashMap<>();
+        configs.put("_Workspace.json", encodeAsDocument().toJson(settings));
         for (NodeBuilder node: getNodes()) {
-            if (configConsumer.apply(String.format("%s/%s.json", getWorkspaceId(), node.getId()), node.build().encodeAsDocument().toJson(settings))) {
-                counter++;
-            }
+            configs.put(String.format("%s.json", node.getId()), node.build().encodeAsDocument().toJson(settings));
         }
 
-        return counter;
+        return configs;
     }
 }

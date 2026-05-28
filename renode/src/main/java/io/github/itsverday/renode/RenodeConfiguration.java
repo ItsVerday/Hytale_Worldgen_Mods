@@ -9,16 +9,27 @@ public class RenodeConfiguration {
             RenodeConfiguration.class, RenodeConfiguration::new
     )
             .append(
-                    new KeyedCodec<>("HytaleHome", Codec.STRING, false),
-                    (asset, field) -> asset.hytaleHome = field,
-                    asset -> asset.hytaleHome
+                    new KeyedCodec<>("UseAssetsPath", Codec.BOOLEAN, false),
+                    (config, field) -> config.useAssetsPath = field,
+                    config -> config.useAssetsPath
+            )
+            .add()
+            .append(
+                    new KeyedCodec<>("HytaleHomes", Codec.STRING_ARRAY, false),
+                    (config, field) -> config.hytaleHomes = field,
+                    config -> config.hytaleHomes
             )
             .add()
             .build();
 
-    private String hytaleHome = "";
+    private boolean useAssetsPath = true;
+    private String[] hytaleHomes = new String[0];
 
-    public String getHytaleHome() {
-        return hytaleHome;
+    public boolean isUseAssetsPath() {
+        return useAssetsPath;
+    }
+
+    public String[] getHytaleHomes() {
+        return hytaleHomes;
     }
 }

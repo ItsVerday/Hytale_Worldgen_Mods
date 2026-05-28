@@ -1,19 +1,24 @@
 package io.github.itsverday.renode;
 
+import com.hypixel.hytale.common.util.java.ManifestUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.AssetModule;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 import io.github.itsverday.renode.builder.NodeRegistry;
+import io.github.itsverday.renode.builder.Renode;
 import io.github.itsverday.renode.builder.workspace.NodeWorkspace;
+import io.github.itsverday.renode.export.FileSystemWorkspaceExporter;
+import io.github.itsverday.renode.export.WorkspaceExporter;
 import io.github.itsverday.renode.vanilla.HytaleGeneratorNodes;
-import io.github.itsverday.renode.util.NodeConfigManager;
 import io.github.itsverday.renode.vanilla.ScriptableBrushNodes;
+import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 import javax.annotation.Nonnull;
-import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RenodePlugin extends JavaPlugin {
@@ -22,8 +27,8 @@ public class RenodePlugin extends JavaPlugin {
     private final Config<RenodeConfiguration> config;
     private final static HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final NodeRegistry registry = new NodeRegistry();
-    private static NodeConfigManager nodeConfigManager;
     private static List<NodeWorkspace> workspaces = null;
+    private final List<WorkspaceExporter> exporters = new ArrayList<>();
 
     public RenodePlugin(@Nonnull JavaPluginInit init) {
         super(init);
@@ -36,65 +41,67 @@ public class RenodePlugin extends JavaPlugin {
         HytaleGeneratorNodes.registerAllNodes();
         ScriptableBrushNodes.registerAllNodes();
         config.save();
+
+        registerDefaultExporters();
     }
 
     @Override
     protected void start() {
-        if (setupNodeConfigManager()) {
-            workspaces = registry.buildWorkspaces();
-            int configCount = 0;
-            for (NodeWorkspace workspace: workspaces) {
-                configCount += workspace.getConfigs((path, contents) -> {
-                    if (!nodeConfigManager.saveFile(path, contents)) {
-                        LOGGER.atWarning().log( "Failed to write node config %s!", path);
-                        return false;
-                    }
+        workspaces = registry.buildWorkspaces();
 
-                    return true;
-                });
+        if (!exporters.isEmpty()) {
+            for (WorkspaceExporter exporter: exporters) {
+                for (NodeWorkspace workspace: workspaces) {
+                    exporter.addWorkspace(workspace);
+                }
+
+                exporter.run();
             }
-
-            LOGGER.atInfo().log("Created %s configs in %s workspaces.", configCount, workspaces.size());
         } else {
-            LOGGER.atInfo().log("Could not setup config manager, skipping config creation");
+            LOGGER.atInfo().log("Skipping config creation since no exporters could be created.");
         }
     }
 
     @Override
     protected void shutdown() {
-        if (workspaces != null) {
-            LOGGER.atInfo().log("Deleting workspaces...");
-            for (NodeWorkspace workspace: workspaces) {
-                if (!nodeConfigManager.removeFile(workspace.getWorkspaceId() + "/")) {
-                    LOGGER.atWarning().log("Failed to delete workspace %s!", workspace.getWorkspaceId());
-                }
-            }
-
-            workspaces = null;
+        for (WorkspaceExporter exporter: exporters) {
+            exporter.clear();
         }
 
         registry.clear();
+        exporters.clear();
     }
 
-    private boolean setupNodeConfigManager() {
-        String hytaleHome = config.get().getHytaleHome();
-        File workspacesDirectory = hytaleHome.isEmpty() ? getWorkspacesDirFromAssets() : getWorkspacesDirFromHome(hytaleHome);
+    private void registerDefaultExporters() {
+        if (config.get().isUseAssetsPath()) {
+            Path assetsPath = AssetModule.get().getBaseAssetPack().getPackLocation();
+            Path workspacesPath = assetsPath.getParent().resolve("Client").resolve("NodeEditor").resolve("Workspaces");
+            if (Files.exists(workspacesPath)) {
+                Renode.registerExporter(new FileSystemWorkspaceExporter("AssetsPath", workspacesPath));
+            }
+        }
 
-        if (workspacesDirectory == null) return false;
-        if (!workspacesDirectory.exists()) return false;
+        String patchline = ManifestUtil.getPatchline();
+        String version = ManifestUtil.getVersion();
 
-        nodeConfigManager = new NodeConfigManager(workspacesDirectory);
-        return true;
-    }
+        if (patchline != null && version != null) {
+            int index = 1;
+            for (String hytaleHome: config.get().getHytaleHomes()) {
+                Path hytaleHomePath = Path.of(hytaleHome);
+                Path gamePath = hytaleHomePath.resolve("install").resolve(patchline).resolve("package").resolve("game");
+                Path gameVersionPath = gamePath.resolve(version);
+                if (!Files.exists(gameVersionPath)) {
+                    gameVersionPath = gamePath.resolve("latest");
+                }
 
-    private File getWorkspacesDirFromAssets() {
-        Path assetsPath = AssetModule.get().getBaseAssetPack().getPackLocation();
-        return new File(assetsPath.getParent().toFile(), "/Client/NodeEditor/Workspaces");
-    }
+                Path workspacesPath = gameVersionPath.resolve("Client").resolve("NodeEditor").resolve("Workspaces");
+                if (Files.exists(workspacesPath)) {
+                    Renode.registerExporter(new FileSystemWorkspaceExporter("HytaleHome(" + index + ")", workspacesPath));
+                }
 
-    private File getWorkspacesDirFromHome(String homePath) {
-        File home = new File(homePath);
-        return null;
+                index++;
+            }
+        }
     }
 
     public static RenodePlugin getInstance() {
@@ -103,5 +110,15 @@ public class RenodePlugin extends JavaPlugin {
 
     public NodeRegistry getRegistry() {
         return registry;
+    }
+
+    public List<WorkspaceExporter> getExporters() {
+        return exporters;
+    }
+
+    @NonNullDecl
+    @Override
+    public HytaleLogger getLogger() {
+        return LOGGER;
     }
 }

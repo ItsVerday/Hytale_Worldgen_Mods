@@ -5,6 +5,7 @@ import io.github.itsverday.renode.builder.content.type.*;
 import io.github.itsverday.renode.builder.root.AbstractNodeRoot;
 import io.github.itsverday.renode.builder.root.SingleNodeRoot;
 import io.github.itsverday.renode.builder.root.VariantNodeRoot;
+import io.github.itsverday.renode.export.WorkspaceExporter;
 
 import javax.annotation.Nullable;
 
@@ -87,6 +88,10 @@ public class Renode {
 
     public static void registerRoot(AbstractNodeRoot root) {
         getRegistry().registerRoot(root);
+    }
+
+    public static void registerExporter(WorkspaceExporter exporter) {
+        RenodePlugin.getInstance().getExporters().add(exporter);
     }
 
     private static NodeRegistry getRegistry() {
