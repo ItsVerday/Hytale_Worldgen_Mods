@@ -1,7 +1,7 @@
 {
     "Group": "Verday",
     "Name": "Carta",
-    "Version": "0.2.0",
+    "Version": "0.3.0",
     "Description": "Adds a flexible Biome placement system for Worldgen v2.",
     "Authors": [
         {
@@ -14,7 +14,7 @@
         
     },
     "OptionalDependencies": {
-        "Verday:Renode": "0.6.0"
+        "Verday:Renode": "0.7.0"
     },
     "DisabledByDefault": false,
     "Main": "io.github.itsverday.carta.CartaPlugin",
