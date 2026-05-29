@@ -136,7 +136,7 @@ public class CartaPlugin extends JavaPlugin {
             onAssetPackLoaded(event.getAssetPack());
         });
 
-        if (PluginManager.get().hasPlugin(PluginIdentifier.fromString("Verday:Renode"), SemverRange.fromString("0.7.0"))) {
+        if (PluginManager.get().hasPlugin(PluginIdentifier.fromString("Verday:Renode"), SemverRange.fromString("${RENODE_CHECK_VERSION}"))) {
             try {
                 RenodeIntegration.registerAllNodes();
             } catch (Exception e) {

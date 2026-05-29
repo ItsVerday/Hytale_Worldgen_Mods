@@ -1,4 +1,3 @@
-// modA/build.gradle
 plugins {
     id "com.azuredoom.hytale-tools"
 }
@@ -6,6 +5,19 @@ plugins {
 dependencies {
     implementation project(":common")
     implementation project(":renode")
+}
+
+tasks.register("processSource", Sync) {
+    from sourceSets.main.java
+    filesMatching("**/*.java") {
+        expand("RENODE_CHECK_VERSION": getProperty("renode.check_version"))
+    }
+
+    into layout.buildDirectory.dir("src")
+}
+
+compileJava {
+    source = processSource.outputs
 }
 
 hytaleTools {

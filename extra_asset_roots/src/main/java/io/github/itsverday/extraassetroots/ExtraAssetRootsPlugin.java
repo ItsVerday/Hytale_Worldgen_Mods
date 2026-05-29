@@ -57,7 +57,7 @@ public class ExtraAssetRootsPlugin extends JavaPlugin {
         registerAssetStore(MaterialProviderAsset.class, "HytaleGenerator/MaterialProviders", MaterialProviderAsset::getId, MaterialProviderAsset.CODEC);
         registerAssetStore(VectorProviderAsset.class, "HytaleGenerator/VectorProviders", VectorProviderAsset::getId, VectorProviderAsset.CODEC);
 
-        if (PluginManager.get().hasPlugin(PluginIdentifier.fromString("Verday:Renode"), SemverRange.fromString("0.7.0"))) {
+        if (PluginManager.get().hasPlugin(PluginIdentifier.fromString("Verday:Renode"), SemverRange.fromString("${RENODE_CHECK_VERSION}"))) {
             try {
                 RenodeIntegration.registerAllNodes();
             } catch (Exception e) {
