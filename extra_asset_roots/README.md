@@ -1,9 +1,9 @@
 # Extra Worldgen v2 Asset Roots
-This is a Hytale Plugin that adds missing Asset Folders and Asset Node Editor workspaces (requires [Renode](../renode/README.md)) for Worldgen v2.
+This is a Hytale Plugin that adds missing Asset Folders and Asset Node Editor workspaces (requires [Renode](https://github.com/ItsVerday/Hytale_Worldgen_Mods/tree/main/renode)) for Worldgen v2.
 This allows modders to create standalone asset `.json` files for these asset types, and edit them independently in the Asset Node Editor.
 
 This mod must be installed as a dependency for any mods that require it.
-Additionally, if you are creating content using this mod, you must also install [Renode](../renode/README.md).
+Additionally, if you are creating content using this mod, you must also install [Renode](https://github.com/ItsVerday/Hytale_Worldgen_Mods/tree/main/renode).
 
 This mod adds Asset Folders for the following asset types:
 - Scanner (Asset Folder: `Server/HytaleGenerator/Scanners`)

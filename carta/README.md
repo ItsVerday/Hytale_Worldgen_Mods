@@ -4,4 +4,4 @@ It accomplishes this by adding a new WorldStructure type, `Carta`, as well as a 
 Using Carta, modders can easily create unique and interesting biome layouts in their Worldgen v2 worlds, using a powerful BiomeProvider system integrated into the Hytale Asset Node editor.
 
 Carta must be installed as a dependency for any mods that require it.
-Additionally, if you are creating content using Carta, you must also install [Renode](../renode/README.md).
+Additionally, if you are creating content using Carta, you must also install [Renode](https://github.com/ItsVerday/Hytale_Worldgen_Mods/tree/main/renode).
