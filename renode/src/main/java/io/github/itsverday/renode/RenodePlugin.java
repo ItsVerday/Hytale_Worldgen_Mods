@@ -40,7 +40,7 @@ public class RenodePlugin extends JavaPlugin {
     protected void setup() {
         HytaleGeneratorNodes.registerAllNodes();
         ScriptableBrushNodes.registerAllNodes();
-        config.save();
+        config.save().thenRun(() -> LOGGER.atInfo().log("Config file saved."));
 
         registerDefaultExporters();
     }
