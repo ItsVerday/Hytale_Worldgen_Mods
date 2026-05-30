@@ -9,7 +9,7 @@
         }
     ],
     "Website": "https://github.com/ItsVerday/Hytale_Worldgen_Mods",
-    "ServerVersion": ">=0.5.2",
+    "ServerVersion": ">=0.5.3",
     "Dependencies": {
         
     },
