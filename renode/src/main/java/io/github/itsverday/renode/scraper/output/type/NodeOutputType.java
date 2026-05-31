@@ -16,7 +16,12 @@ public class NodeOutputType extends OutputType {
     @Override
     public StringBuilder generateCode() {
         StringBuilder stringBuilder = new StringBuilder();
-        CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addNodeOutput", getOutput().getSchemaId(), getOutput().getLabel(), getOutput().isMultiple(), node);
+        if (getOutput().getDescription() == null) {
+            CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addNodeOutput", getOutput().getSchemaId(), getOutput().getLabel(), getOutput().isMultiple(), node);
+        } else {
+            CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addNodeOutput", getOutput().getSchemaId(), getOutput().getLabel(), getOutput().isMultiple(), node, getOutput().getDescription());
+        }
+
         return stringBuilder;
     }
 }

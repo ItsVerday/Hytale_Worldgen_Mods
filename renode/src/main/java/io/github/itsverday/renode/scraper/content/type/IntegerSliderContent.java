@@ -14,8 +14,8 @@ public class IntegerSliderContent extends Content {
     @Nullable
     private final Integer width;
 
-    public IntegerSliderContent(String id, String label, int min, int max, int tickFrequency, @Nullable Integer defaultValue, @Nullable Integer width) {
-        super(id, label);
+    public IntegerSliderContent(String id, String label, @Nullable String description, int min, int max, int tickFrequency, @Nullable Integer defaultValue, @Nullable Integer width) {
+        super(id, label, description);
         this.min = min;
         this.max = max;
         this.tickFrequency = tickFrequency;
@@ -29,6 +29,7 @@ public class IntegerSliderContent extends Content {
         CodeGeneratorUtils.writeFunctionCall(stringBuilder, "Renode.integerSliderContent", getSchemaId(), getLabel(), min, max, tickFrequency);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withWidth", width);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

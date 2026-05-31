@@ -12,16 +12,19 @@ public class NodeOutputDefinition extends BsonEncodable {
     private final String type;
     private final String color;
     @Nullable
+    private final String description;
+    @Nullable
     private final Boolean multiple;
     @Nullable
     private final String label;
     @Nullable
     private final Boolean isMap;
 
-    public NodeOutputDefinition(String id, String type, String color, @Nullable Boolean multiple, @Nullable String label, @Nullable Boolean isMap) {
+    public NodeOutputDefinition(String id, String type, String color, @Nullable String description, @Nullable Boolean multiple, @Nullable String label, @Nullable Boolean isMap) {
         this.id = id;
         this.type = type;
         this.color = color;
+        this.description = description;
         this.multiple = multiple;
         this.label = label;
         this.isMap = isMap;
@@ -37,6 +40,11 @@ public class NodeOutputDefinition extends BsonEncodable {
 
     public String getColor() {
         return color;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return description;
     }
 
     @Nullable
@@ -60,6 +68,7 @@ public class NodeOutputDefinition extends BsonEncodable {
         document.put("Id", new BsonString(getId()));
         document.put("Type", new BsonString(getType()));
         document.put("Color", new BsonString(getColor()));
+        if (getDescription() != null) document.put("Description", new BsonString(getDescription()));
         if (getMultiple() != null) document.put("Multiple", new BsonBoolean(getMultiple()));
         if (getLabel() != null) document.put("Label", new BsonString(getLabel()));
         if (getIsMap() != null) document.put("IsMap", new BsonBoolean(getIsMap()));

@@ -11,8 +11,8 @@ public class IntegerContent extends Content {
     @Nullable
     private final Integer width;
 
-    public IntegerContent(String id, String label, @Nullable Integer defaultValue, @Nullable Integer width) {
-        super(id, label);
+    public IntegerContent(String id, String label, @Nullable String description, @Nullable Integer defaultValue, @Nullable Integer width) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
         this.width = width;
     }
@@ -23,6 +23,7 @@ public class IntegerContent extends Content {
         CodeGeneratorUtils.writeFunctionCall(stringBuilder, "Renode.integerContent", getSchemaId(), getLabel());
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withWidth", width);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

@@ -9,6 +9,8 @@ public abstract class AbstractNodeOutput {
     public abstract String getId();
     public abstract String getType();
     public abstract String getColor();
+    @Nullable
+    public abstract String getDescription();
     public abstract String getNode();
     public abstract String getLabel();
 

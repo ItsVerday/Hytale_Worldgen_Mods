@@ -4,6 +4,7 @@ import io.github.itsverday.renode.builder.NodeBuilder;
 import io.github.itsverday.renode.builder.NodeVariantClass;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -11,12 +12,15 @@ import java.util.function.Supplier;
 public class VariantNodeOutput extends AbstractNodeOutput {
     private final String id;
     private final String label;
+    @Nullable
+    private final String description;
     private final boolean multiple;
     private final Supplier<NodeVariantClass> variant;
 
-    public VariantNodeOutput(String id, String label, boolean multiple, Supplier<NodeVariantClass> variant) {
+    public VariantNodeOutput(String id, String label, @Nullable String description, boolean multiple, Supplier<NodeVariantClass> variant) {
         this.id = id;
         this.label = label;
+        this.description = description;
         this.multiple = multiple;
         this.variant = variant;
     }
@@ -34,6 +38,12 @@ public class VariantNodeOutput extends AbstractNodeOutput {
     @Override
     public String getColor() {
         return variant.get().getColor();
+    }
+
+    @Nullable
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override

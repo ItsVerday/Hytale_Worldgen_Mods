@@ -9,8 +9,8 @@ public class CheckboxContent extends Content {
     @Nullable
     private final Boolean defaultValue;
 
-    public CheckboxContent(String id, String label, @Nullable Boolean defaultValue) {
-        super(id, label);
+    public CheckboxContent(String id, String label, @Nullable String description, @Nullable Boolean defaultValue) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
     }
 
@@ -19,6 +19,7 @@ public class CheckboxContent extends Content {
         StringBuilder stringBuilder = new StringBuilder();
         CodeGeneratorUtils.writeFunctionCall(stringBuilder, "Renode.checkboxContent", getSchemaId(), getLabel());
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

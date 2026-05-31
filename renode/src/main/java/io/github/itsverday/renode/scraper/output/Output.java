@@ -6,12 +6,15 @@ import io.github.itsverday.renode.scraper.content.Content;
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class Output implements CodeGenerator {
     private final String id;
     private final String type;
     private final String label;
+    @Nullable
+    private final String description;
     private final boolean multiple;
     private final ArrayList<Content> fields = new ArrayList<>();
 
@@ -21,10 +24,17 @@ public class Output implements CodeGenerator {
     public Output(BsonDocument document) {
         id = document.getString("Id").getValue();
         type = document.getString("Type").getValue();
+
         if (document.containsKey("Label")) {
             label = document.getString("Label").getValue();
         } else {
             label = id;
+        }
+
+        if (document.containsKey("Description")) {
+            description = document.getString("Description").getValue();
+        } else {
+            description = null;
         }
 
         if (document.containsKey("Multiple")) {
@@ -50,6 +60,11 @@ public class Output implements CodeGenerator {
 
     public String getLabel() {
         return label;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return description;
     }
 
     public boolean isMultiple() {

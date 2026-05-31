@@ -13,8 +13,8 @@ public class StringContent extends Content {
     @Nullable
     private final Integer height;
 
-    public StringContent(String id, String label, @Nullable String defaultValue, @Nullable Integer width, @Nullable Integer height) {
-        super(id, label);
+    public StringContent(String id, String label, @Nullable String description, @Nullable String defaultValue, @Nullable Integer width, @Nullable Integer height) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
         this.width = width;
         this.height = height;
@@ -27,6 +27,7 @@ public class StringContent extends Content {
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withWidth", width);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withHeight", height);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

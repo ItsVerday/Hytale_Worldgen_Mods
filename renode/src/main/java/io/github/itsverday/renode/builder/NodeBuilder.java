@@ -26,6 +26,8 @@ public class NodeBuilder {
     private String title;
     private String colorOverride;
     @Nullable
+    private String description = null;
+    @Nullable
     private NodeVariantClass variant = null;
     private final List<NodeCategory> categories = new ArrayList<>();
     private final List<NodeContentBuilder<?>> content = new ArrayList<>();
@@ -68,6 +70,16 @@ public class NodeBuilder {
         }
 
         return "Grey";
+    }
+
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
+
+    public NodeBuilder withDescription(String description) {
+        this.description = description;
+        return this;
     }
 
     public List<NodeCategory> getCategories() {
@@ -149,20 +161,36 @@ public class NodeBuilder {
         return this;
     }
 
+    public NodeBuilder addNodeOutput(String id, String label, boolean multiple, Supplier<NodeBuilder> node, String description) {
+        return addOutput(new NodeNodeOutput(id, label, description, multiple, node));
+    }
+
     public NodeBuilder addNodeOutput(String id, String label, boolean multiple, Supplier<NodeBuilder> node) {
-        return addOutput(new NodeNodeOutput(id, label, multiple, node));
+        return addNodeOutput(id, label, multiple, node, null);
+    }
+
+    public NodeBuilder addNodeOutput(String id, String label, boolean multiple, NodeBuilder node, String description) {
+        return addNodeOutput(id, label, multiple, () -> node, description);
     }
 
     public NodeBuilder addNodeOutput(String id, String label, boolean multiple, NodeBuilder node) {
-        return addNodeOutput(id, label, multiple, () -> node);
+        return addNodeOutput(id, label, multiple, () -> node, null);
+    }
+
+    public NodeBuilder addVariantOutput(String id, String label, boolean multiple, Supplier<NodeVariantClass> variant, String description) {
+        return addOutput(new VariantNodeOutput(id, label, description, multiple, variant));
     }
 
     public NodeBuilder addVariantOutput(String id, String label, boolean multiple, Supplier<NodeVariantClass> variant) {
-        return addOutput(new VariantNodeOutput(id, label, multiple, variant));
+        return addVariantOutput(id, label, multiple, variant, null);
+    }
+
+    public NodeBuilder addVariantOutput(String id, String label, boolean multiple, NodeVariantClass variant, String description) {
+        return addVariantOutput(id, label, multiple, () -> variant, description);
     }
 
     public NodeBuilder addVariantOutput(String id, String label, boolean multiple, NodeVariantClass variant) {
-        return addVariantOutput(id, label, multiple, () -> variant);
+        return addVariantOutput(id, label, multiple, () -> variant, null);
     }
 
     public NodeBuilder clearOutputs() {
@@ -212,7 +240,7 @@ public class NodeBuilder {
         int outputIndex = 1;
         for (AbstractNodeOutput output: getOutputs()) {
             String contentId = "Output" + outputIndex++;
-            outputs.add(new NodeOutputDefinition(contentId, output.getType(), output.getColor(), output.getMultiple(), output.getLabel(), output.getIsMap()));
+            outputs.add(new NodeOutputDefinition(contentId, output.getType(), output.getColor(), output.getDescription(), output.getMultiple(), output.getLabel(), output.getIsMap()));
             schema.addValue(output.getId(), new NodeSchemaPinValueDefinition(contentId, output.getNode()));
         }
 
@@ -223,6 +251,6 @@ public class NodeBuilder {
             inputs.add(new NodeInputDefinition(inputId, input.getType(), input.getColor() != null ? input.getColor() : getColor(), input.getMultiple()));
         }
 
-        return new NodeDefinition(getId(), getTitle(), getColor(), content.toArray(new NodeContentDefinition[0]), inputs.toArray(new NodeInputDefinition[0]), outputs.toArray(new NodeOutputDefinition[0]), schema);
+        return new NodeDefinition(getId(), getTitle(), getColor(), getDescription(), content.toArray(new NodeContentDefinition[0]), inputs.toArray(new NodeInputDefinition[0]), outputs.toArray(new NodeOutputDefinition[0]), schema);
     }
 }

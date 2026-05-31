@@ -23,6 +23,8 @@ public class Node implements Identified, CodeGenerator {
     private final String id;
     private final String title;
     private final String color;
+    @Nullable
+    private final String description;
     private final ArrayList<Content> contents = new ArrayList<>();
     private final ArrayList<Output> outputs = new ArrayList<>();
     private final ArrayList<String> inputTypes = new ArrayList<>();
@@ -36,6 +38,11 @@ public class Node implements Identified, CodeGenerator {
         id = document.getString("Id").getValue();
         title = document.getString("Title").getValue();
         color = document.getString("Color").getValue();
+        if (document.containsKey("Description")) {
+            description = document.getString("Description").getValue();
+        } else {
+            description = null;
+        }
 
         if (document.containsKey("Content")) {
             for (BsonValue contentValue: document.getArray("Content")) {
@@ -97,6 +104,11 @@ public class Node implements Identified, CodeGenerator {
 
     public String getColor() {
         return color;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return description;
     }
 
     @Nullable
@@ -173,6 +185,7 @@ public class Node implements Identified, CodeGenerator {
 
         StringBuilder stringBuilder = new StringBuilder();
         CodeGeneratorUtils.writeFunctionCall(stringBuilder, "addNode", initStringBuilder);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", description);
         for (Content content: contents) {
             CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addContent", content.generateCode());
         }

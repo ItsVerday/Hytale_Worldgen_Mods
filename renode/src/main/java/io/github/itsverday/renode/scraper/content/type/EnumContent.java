@@ -12,8 +12,8 @@ public class EnumContent extends Content {
     @Nullable
     private final Integer width;
 
-    public EnumContent(String id, String label, String[] values, @Nullable String defaultValue, @Nullable Integer width) {
-        super(id, label);
+    public EnumContent(String id, String label, @Nullable String description, String[] values, @Nullable String defaultValue, @Nullable Integer width) {
+        super(id, label, description);
         this.values = values;
         this.defaultValue = defaultValue;
         this.width = width;
@@ -26,6 +26,7 @@ public class EnumContent extends Content {
         CodeGeneratorUtils.writeFunctionCallArray(stringBuilder, ".withValues", values);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withWidth", width);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

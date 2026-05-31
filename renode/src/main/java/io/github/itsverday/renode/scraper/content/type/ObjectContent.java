@@ -3,14 +3,15 @@ package io.github.itsverday.renode.scraper.content.type;
 import io.github.itsverday.renode.scraper.codegen.CodeGeneratorUtils;
 import io.github.itsverday.renode.scraper.content.Content;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectContent extends Content {
     private final List<Content> fields = new ArrayList<>();
 
-    public ObjectContent(String id, String label, List<Content> fields) {
-        super(id, label);
+    public ObjectContent(String id, String label, @Nullable String description, List<Content> fields) {
+        super(id, label, description);
         this.fields.addAll(fields);
     }
 
@@ -35,6 +36,7 @@ public class ObjectContent extends Content {
         }
 
         CodeGeneratorUtils.writeFunctionCallArray(stringBuilder, ".withFields", fields.toArray());
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

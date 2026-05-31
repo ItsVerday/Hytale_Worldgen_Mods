@@ -16,7 +16,11 @@ public class VariantOutputType extends OutputType {
     @Override
     public StringBuilder generateCode() {
         StringBuilder stringBuilder = new StringBuilder();
-        CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addVariantOutput", getOutput().getSchemaId(), getOutput().getLabel(), getOutput().isMultiple(), variant);
+        if (getOutput().getDescription() == null) {
+            CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addVariantOutput", getOutput().getSchemaId(), getOutput().getLabel(), getOutput().isMultiple(), variant);
+        } else {
+            CodeGeneratorUtils.writeFunctionCall(stringBuilder, ".addVariantOutput", getOutput().getSchemaId(), getOutput().getLabel(), getOutput().isMultiple(), variant, getOutput().getDescription());
+        }
         return stringBuilder;
     }
 }

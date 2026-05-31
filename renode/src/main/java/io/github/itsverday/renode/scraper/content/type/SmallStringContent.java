@@ -11,8 +11,8 @@ public class SmallStringContent extends Content {
     @Nullable
     private final Integer width;
 
-    public SmallStringContent(String id, String label, @Nullable String defaultValue, @Nullable Integer width) {
-        super(id, label);
+    public SmallStringContent(String id, String label, @Nullable String description, @Nullable String defaultValue, @Nullable Integer width) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
         this.width = width;
     }
@@ -23,6 +23,7 @@ public class SmallStringContent extends Content {
         CodeGeneratorUtils.writeFunctionCall(stringBuilder, "Renode.smallStringContent", getSchemaId(), getLabel());
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withWidth", width);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }

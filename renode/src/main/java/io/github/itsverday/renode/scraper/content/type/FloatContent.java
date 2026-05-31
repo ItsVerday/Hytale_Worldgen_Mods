@@ -11,8 +11,8 @@ public class FloatContent extends Content {
     @Nullable
     private final Integer width;
 
-    public FloatContent(String id, String label, @Nullable Double defaultValue, @Nullable Integer width) {
-        super(id, label);
+    public FloatContent(String id, String label, @Nullable String description, @Nullable Double defaultValue, @Nullable Integer width) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
         this.width = width;
     }
@@ -23,6 +23,7 @@ public class FloatContent extends Content {
         CodeGeneratorUtils.writeFunctionCall(stringBuilder, "Renode.floatContent", getSchemaId(), getLabel());
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDefaultValue", defaultValue);
         CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withWidth", width);
+        CodeGeneratorUtils.writeOptionalFunctionCall(stringBuilder, ".withDescription", getDescription());
         return stringBuilder;
     }
 }
