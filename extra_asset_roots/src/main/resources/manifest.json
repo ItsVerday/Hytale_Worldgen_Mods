@@ -1,7 +1,7 @@
 {
     "Group": "Verday",
     "Name": "Extra_Worldgen_Asset_Roots",
-    "Version": "0.2.0",
+    "Version": "0.3.0",
     "Description": "Adds missing asset directories/node editor asset roots for Worldgen v2 assets.",
     "Authors": [
         {
