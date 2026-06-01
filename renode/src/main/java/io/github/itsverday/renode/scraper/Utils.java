@@ -5,23 +5,25 @@ import org.bson.BsonDocument;
 import org.bson.BsonValue;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Utils {
-    public static void walkFiles(File file, Consumer<File> consumer) {
+    public static void walkPaths(Path path, Consumer<Path> consumer) {
         try {
-            if (file.isDirectory()) {
-                File[] subFiles = file.listFiles();
-                if (subFiles == null) return;
-
-                for (File subFile: subFiles) {
-                    walkFiles(subFile, consumer);
+            if (Files.isDirectory(path)) {
+                try (Stream<Path> pathStream = Files.list(path)) {
+                    List<Path> pathList = pathStream.toList();
+                    for (Path childPath: pathList) {
+                        walkPaths(childPath, consumer);
+                    }
                 }
             } else {
-                consumer.accept(file);
+                consumer.accept(path);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,17 +31,23 @@ public class Utils {
     }
 
     public static String fixIdentifier(String identifier, String prefix) {
-        return (prefix + identifier).replaceAll("[^A-Za-z0-9_]", "").toUpperCase();
+        identifier = identifier.replaceAll("([A-Z])", "_$1");
+        identifier = identifier.replaceAll("[-. ]", "_");
+        String full = prefix + identifier;
+        full = full.replaceAll("__+", "_");
+        full = full.replaceAll("[^A-Za-z0-9_]", "");
+
+        return full.toUpperCase();
     }
 
-    public static BsonDocument readJsonFile(File file) throws Exception {
+    public static BsonDocument readJsonFile(Path path) throws Exception {
         try {
-            String contents = Files.readString(file.toPath()).trim();
+            String contents = Files.readString(path).trim();
             // Trim JSON input to first "{" character. Fixes a weird parsing error from the Node Configs.
             contents = contents.substring(contents.indexOf("{"));
             return BsonDocument.parse(contents);
         } catch (Exception exception) {
-            throw new Exception("Error reading file " + file, exception);
+            throw new Exception("Error reading file " + path, exception);
         }
     }
 

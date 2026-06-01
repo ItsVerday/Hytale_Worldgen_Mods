@@ -15,7 +15,7 @@ import org.bson.BsonDocument;
 import org.bson.BsonValue;
 
 import javax.annotation.Nullable;
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Workspace implements CodeGenerator {
@@ -25,15 +25,15 @@ public class Workspace implements CodeGenerator {
     private final ArrayList<Variant> variants = new ArrayList<>();
     private final ArrayList<Root> roots = new ArrayList<>();
 
-    public Workspace(File workspaceFile) throws Exception {
+    public Workspace(Path workspacePath) throws Exception {
         try {
-            workspaceDocument = Utils.readJsonFile(workspaceFile);
+            workspaceDocument = Utils.readJsonFile(workspacePath);
         } catch (Exception exception) {
-            throw new Exception("Error initializing Workspace " + workspaceFile, exception);
+            throw new Exception("Error initializing Workspace " + workspacePath, exception);
         }
 
-        Utils.walkFiles(workspaceFile.getParentFile(), nodeFile -> {
-            if (workspaceFile.equals(nodeFile)) return;
+        Utils.walkPaths(workspacePath.getParent(), nodeFile -> {
+            if (workspacePath.equals(nodeFile)) return;
             try {
                 BsonDocument document = Utils.readJsonFile(nodeFile);
                 Node node = new Node(document);

@@ -57,6 +57,7 @@ public abstract class Content implements CodeGenerator {
         String id = document.getString("Id").getValue();
         String type = document.getString("Type").getValue();
 
+        if (!document.containsKey("Options")) return null;
         BsonDocument options = document.getDocument("Options");
 
         String description = null;
