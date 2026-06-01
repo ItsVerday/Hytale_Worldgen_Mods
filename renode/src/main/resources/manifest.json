@@ -1,7 +1,7 @@
 {
     "Group": "Verday",
     "Name": "Renode",
-    "Version": "0.7.1",
+    "Version": "0.8.0",
     "Description": "Plugin/Library to perform automatic node config generation for the Asset Node Editor.",
     "Authors": [
         {

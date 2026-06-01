@@ -14,7 +14,7 @@
         
     },
     "OptionalDependencies": {
-        "Verday:Renode": ">=0.7.0"
+        "Verday:Renode": ">=0.8.0"
     },
     "DisabledByDefault": false,
     "Main": "io.github.itsverday.carta.CartaPlugin",
