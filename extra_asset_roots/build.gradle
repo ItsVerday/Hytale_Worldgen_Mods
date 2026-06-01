@@ -24,7 +24,7 @@ hytaleTools {
     modId = "Extra_Worldgen_Asset_Roots"
     version = getProperty("extra_asset_roots.version")
     mainClass = "io.github.itsverday.extraassetroots.ExtraAssetRootsPlugin"
-    manifestDependencies = ""
+    manifestDependencies = "Hytale:HytaleGenerator=1.0.0"
     manifestOptionalDependencies = "Verday:Renode=" + getProperty("renode.check_version")
     modDescription = "Adds missing asset directories/node editor asset roots for Worldgen v2 assets."
     modCredits = "Verday"

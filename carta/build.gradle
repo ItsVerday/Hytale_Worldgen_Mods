@@ -24,7 +24,7 @@ hytaleTools {
     modId = "Carta"
     version = getProperty("carta.version")
     mainClass = "io.github.itsverday.carta.CartaPlugin"
-    manifestDependencies = ""
+    manifestDependencies = "Hytale:HytaleGenerator=1.0.0"
     manifestOptionalDependencies = "Verday:Renode=" + getProperty("renode.check_version")
     modDescription = "Adds a flexible Biome placement system for Worldgen v2."
     modCredits = "Verday"

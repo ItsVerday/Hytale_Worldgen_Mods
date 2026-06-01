@@ -11,7 +11,7 @@
     "Website": "https://github.com/ItsVerday/Hytale_Worldgen_Mods",
     "ServerVersion": ">=0.5.3",
     "Dependencies": {
-        
+        "Hytale:HytaleGenerator": "1.0.0"
     },
     "OptionalDependencies": {
         "Verday:Renode": ">=0.8.0"
