@@ -1,9 +1,20 @@
 plugins {
     id "com.azuredoom.hytale-tools"
+    id "application"
 }
 
 dependencies {
     implementation project(":common")
+}
+
+// Execute Renode scraper utility, which takes existing Asset Node Editor node configs and converts them into Renode definitions.
+// Output will still need some manual changes but it will automate 90%+ of the process.
+tasks.register("executeScraper", JavaExec) {
+    mainClass = "io.github.itsverday.renode.scraper.Main"
+    // Before running, replace {HYTALE_HOME} with your Hytale installation's home directory.
+    args = ["{HYTALE_HOME}/install/release/package/game/latest/Client/NodeEditor/Workspaces",
+            "./src/main/java/io/github/itsverday/renode/vanilla/ScraperOutput.txt"]
+    classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
 }
 
 hytaleTools {
