@@ -7,10 +7,12 @@ dependencies {
     implementation project(":renode")
 }
 
-tasks.register("processSource", Sync) {
+tasks.register("processSource", Copy) {
     from sourceSets.main.java
     filesMatching("**/*.java") {
-        expand("RENODE_CHECK_VERSION": getProperty("renode.check_version"))
+        expand("RENODE_CHECK_VERSION": getProperty("renode.check_version")) {
+            escapeBackslash = true
+        }
     }
 
     into layout.buildDirectory.dir("src")
