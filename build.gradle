@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "com.azuredoom.hytale-workspace" version "1.0.36"
+    id "com.azuredoom.hytale-workspace" version "1.0.37"
 }
 
 repositories {
