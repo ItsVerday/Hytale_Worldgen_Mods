@@ -91,6 +91,12 @@ public class Renode {
     }
 
     public static void registerExporter(WorkspaceExporter exporter) {
+        for (WorkspaceExporter other: RenodePlugin.getInstance().getExporters()) {
+            if (exporter.equals(other)) {
+                return;
+            }
+        }
+
         RenodePlugin.getInstance().getExporters().add(exporter);
     }
 

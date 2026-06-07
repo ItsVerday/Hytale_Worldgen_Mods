@@ -15,6 +15,10 @@ public class FileSystemWorkspaceExporter extends WorkspaceExporter {
         this.rootFolder = rootFolder;
     }
 
+    public Path getRootFolder() {
+        return rootFolder;
+    }
+
     @Override
     public boolean exportConfig(NodeWorkspace workspace, String configName, String configContents) {
         try {
@@ -62,5 +66,14 @@ public class FileSystemWorkspaceExporter extends WorkspaceExporter {
             RenodePlugin.getInstance().getLogger().atWarning().withCause(e).log("Failed to delete file at path '%s'!", path);
             return false;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof FileSystemWorkspaceExporter other) {
+            return getRootFolder().equals(other.getRootFolder());
+        }
+
+        return false;
     }
 }
