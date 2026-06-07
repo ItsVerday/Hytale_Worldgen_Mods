@@ -10,7 +10,7 @@ dependencies {
 tasks.register("processSource", Sync) {
     from sourceSets.main.java
     filesMatching("**/*.java") {
-        expandexpand("RENODE_CHECK_VERSION": getProperty("renode.check_version")) {
+        expand("RENODE_CHECK_VERSION": getProperty("renode.check_version")) {
             escapeBackslash = true
         }
     }
