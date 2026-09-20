@@ -6,7 +6,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.validation.Validators;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.Smoothed2DBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -55,10 +54,10 @@ public class SmoothedBiomeProviderAsset extends BiomeProviderAsset {
     public BiomeProvider build(@NonNullDecl Argument argument) {
         if (isSkipped()) return null;
 
-        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, true);
+        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, true);
         if (radius == 0.0) return input;
 
-        BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, () -> input, true);
+        BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, true);
         return new Smoothed2DBiomeProvider(input.makeCached(), fallback, radius, threshold);
     }
 

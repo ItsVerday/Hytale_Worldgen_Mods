@@ -98,6 +98,7 @@ public class CartaWorldStructureAsset extends WorldStructureAsset {
 
         BiomeProviderAsset.Argument biomeProviderArgument = new BiomeProviderAsset.Argument(argument.materialCache, argument.parentSeed, referenceBundle, argument.workerId, argument.threadBridge, defaultBiomeId, useDebugBiomes);
         BiomeProvider defaultBiomeProvider = new ConstantBiomeProvider(biomeProviderArgument.getBiomeId(defaultBiomeId, null));
+        biomeProviderArgument.pushStageLabel(null, defaultBiomeProvider);
         if (!biomeProviderArgument.biomesById.containsKey(defaultBiomeId)) {
             CartaPlugin.LOGGER.atSevere().log("Default Biome with id '%s' does not exist!", defaultBiomeId);
         }

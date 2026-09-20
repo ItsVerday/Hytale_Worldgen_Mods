@@ -15,7 +15,6 @@ import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.FieldFunctionBiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -59,7 +58,7 @@ public class FieldFunctionBiomeProviderAsset extends BiomeProviderAsset {
         Density density = densityAsset != null ? densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge))) : new ConstantValueDensity(0.0);
         ArrayList<FieldFunctionBiomeProvider.FieldDelimiter> delimiters = new ArrayList<>();
 
-        BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, PreviousBiomeProvider::new, false);
+        BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, false);
 
         for (FieldDelimiterAsset delimiterAsset: delimiterAssets) {
             if (delimiterAsset.inputAsset == null) continue;

@@ -6,7 +6,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.OffsetBiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.joml.Vector3d;
@@ -46,7 +45,7 @@ public class OffsetBiomeProviderAsset extends BiomeProviderAsset {
     public BiomeProvider build(@NonNullDecl Argument argument) {
         if (isSkipped()) return null;
 
-        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, false);
+        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, false);
         return new OffsetBiomeProvider(input, new Vector3d(offsetX, 0, offsetZ));
     }
 

@@ -13,7 +13,6 @@ import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.validation.Validators;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.WeightedBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -60,7 +59,7 @@ public class WeightedBiomeProviderAsset extends BiomeProviderAsset {
 
         List<WeightedBiomeProvider.WeightedEntry> entries = new ArrayList<>();
         for (WeightedEntryAsset entryAsset: entryAssets) {
-            BiomeProvider value = BiomeProviderAsset.buildStatic(entryAsset.valueAsset, argument, PreviousBiomeProvider::new, false);
+            BiomeProvider value = BiomeProviderAsset.buildStatic(entryAsset.valueAsset, argument, false);
             entries.add(new WeightedBiomeProvider.WeightedEntry(value, entryAsset.weight));
         }
 

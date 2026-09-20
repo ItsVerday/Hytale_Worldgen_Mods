@@ -4,7 +4,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.positions.PositionCellsBiomeProviderCellTypeAsset;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.PositionCellsBiomeProviderCellType;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.celltypes.FillPositionCellsBiomeProviderCellType;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -27,8 +26,8 @@ public class FillPositionCellsBiomeProviderCellTypeAsset extends PositionCellsBi
 
     @NonNullDecl
     @Override
-    public PositionCellsBiomeProviderCellType build(@NonNullDecl BiomeProviderAsset.Argument argument, BiomeProvider fallback) {
-        return new FillPositionCellsBiomeProviderCellType(BiomeProviderAsset.buildStatic(inputAsset, argument, () -> fallback, false), getWeight());
+    public PositionCellsBiomeProviderCellType build(@NonNullDecl BiomeProviderAsset.Argument argument) {
+        return new FillPositionCellsBiomeProviderCellType(BiomeProviderAsset.buildStatic(inputAsset, argument, false), getWeight());
     }
 
     @Override

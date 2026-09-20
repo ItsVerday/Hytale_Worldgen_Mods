@@ -5,7 +5,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -28,6 +27,7 @@ public class PreviousBiomeProviderAsset extends BiomeProviderAsset {
     @NullableDecl
     @Override
     public BiomeProvider build(@NonNullDecl Argument argument) {
-        return new PreviousBiomeProvider(argument.getPreviousId(previousLabel));
+        if (previousLabel.isEmpty()) return argument.getPreviousWithLabel(null);
+        return argument.getPreviousWithLabel(previousLabel);
     }
 }

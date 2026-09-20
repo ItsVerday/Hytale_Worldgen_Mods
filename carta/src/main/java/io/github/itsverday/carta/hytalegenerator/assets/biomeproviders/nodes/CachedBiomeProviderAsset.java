@@ -4,7 +4,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -29,7 +28,7 @@ public class CachedBiomeProviderAsset extends BiomeProviderAsset {
     public BiomeProvider build(@NonNullDecl Argument argument) {
         if (isSkipped()) return null;
 
-        return BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, true);
+        return BiomeProviderAsset.buildStatic(inputAsset, argument, true);
     }
 
     @Override

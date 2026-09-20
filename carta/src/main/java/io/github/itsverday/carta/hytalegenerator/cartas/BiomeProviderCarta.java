@@ -25,7 +25,7 @@ public class BiomeProviderCarta extends BiCarta<Integer> {
     @Override
     public Integer apply(int x, int z, @NonNullDecl WorkerIndexer.Id id) {
         rPosition.set(x, 0, z);
-        rContext.assign(rPosition, null, id, baseFallback, 0, null);
+        rContext.assign(rPosition, null, id);
         return biomeRemap[biomeProvider.process(rContext)];
     }
 

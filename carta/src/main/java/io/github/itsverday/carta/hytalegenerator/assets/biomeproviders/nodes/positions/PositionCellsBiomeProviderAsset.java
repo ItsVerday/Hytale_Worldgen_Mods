@@ -11,7 +11,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.PositionCellsBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.PositionCellsBiomeProviderCellType;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -93,12 +92,12 @@ public class PositionCellsBiomeProviderAsset extends BiomeProviderAsset {
         if (maxDistance - distanceWarpMin <= 0) return null;
 
         PositionProvider positions = positionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge));
-        BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, PreviousBiomeProvider::new, false);
+        BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, false);
         SeedBox childSeed = argument.parentSeed.child(seed);
         Density distanceWarpField = distanceWarpFieldAsset != null ? distanceWarpFieldAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge)) : null;
         List<PositionCellsBiomeProviderCellType> cellTypes = new ArrayList<>();
         for (PositionCellsBiomeProviderCellTypeAsset cellTypeAsset: cellTypeAssets) {
-            cellTypes.add(cellTypeAsset.build(argument, fallback));
+            cellTypes.add(cellTypeAsset.build(argument));
         }
 
         if (cellTypes.isEmpty()) return fallback;

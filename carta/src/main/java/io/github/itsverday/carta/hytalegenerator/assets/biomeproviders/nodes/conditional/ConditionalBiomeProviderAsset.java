@@ -4,7 +4,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.conditional.BiomeProviderCondition;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.conditional.ConditionalBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -47,8 +46,8 @@ public class ConditionalBiomeProviderAsset extends BiomeProviderAsset {
         if (conditionAsset == null) return null;
 
         BiomeProviderCondition condition = conditionAsset.build(argument);
-        BiomeProvider ifTrue = BiomeProviderAsset.buildStatic(ifTrueAsset, argument, PreviousBiomeProvider::new, false);
-        BiomeProvider ifFalse = BiomeProviderAsset.buildStatic(ifFalseAsset, argument, PreviousBiomeProvider::new, false);
+        BiomeProvider ifTrue = BiomeProviderAsset.buildStatic(ifTrueAsset, argument, false);
+        BiomeProvider ifFalse = BiomeProviderAsset.buildStatic(ifFalseAsset, argument, false);
         return new ConditionalBiomeProvider(condition, ifTrue, ifFalse);
     }
 

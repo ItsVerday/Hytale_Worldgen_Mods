@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<String, DefaultAssetMap<String, BiomeProviderAsset>> {
     public static final ConcurrentHashMap<String, Exported> exportedNodes = new ConcurrentHashMap<>();
@@ -85,10 +84,10 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
     public abstract BiomeProvider build(@Nonnull Argument argument);
 
     @Nonnull
-    public BiomeProvider build(@Nonnull Argument argument, @Nonnull Supplier<BiomeProvider> fallback, boolean cache) {
+    public BiomeProvider build(@Nonnull Argument argument, boolean cache) {
         BiomeProvider built = build(argument);
         if (built == null) {
-            BiomeProvider fallbackProvider = fallback.get();
+            BiomeProvider fallbackProvider = argument.getPreviousWithLabel(null);
             if (cache) fallbackProvider = fallbackProvider.makeCached();
             return fallbackProvider;
         }
@@ -99,14 +98,14 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
     }
 
     @Nonnull
-    public static BiomeProvider buildStatic(@Nullable BiomeProviderAsset asset, @Nonnull Argument argument, @Nonnull Supplier<BiomeProvider> fallback, boolean cache) {
+    public static BiomeProvider buildStatic(@Nullable BiomeProviderAsset asset, @Nonnull Argument argument, boolean cache) {
         if (asset == null) {
-            BiomeProvider fallbackProvider = fallback.get();
+            BiomeProvider fallbackProvider = argument.getPreviousWithLabel(null);
             if (cache) fallbackProvider = fallbackProvider.makeCached();
             return fallbackProvider;
         }
 
-        return asset.build(argument, fallback, cache);
+        return asset.build(argument, cache);
     }
 
     @Nonnull
@@ -143,10 +142,10 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
         public String defaultBiomeId;
         public boolean useDebugBiomes;
         public Material defaultDebugMaterial;
-        public final Registry<String> previousLabelRegistry;
         public final Registry<String> biomeIdRegistry;
         public final HashMap<String, Biome> biomesById;
         public final List<Integer> biomeRemap;
+        public final List<StagedBiomeProviderLabel> stageLabels;
 
         public Argument(@Nonnull MaterialCache materialCache, @Nonnull SeedBox parentSeed, @Nonnull ReferenceBundle referenceBundle, @Nonnull WorkerIndexer.Id workerId, @Nonnull ThreadBridge threadBridge, @Nonnull String defaultBiomeId, boolean useDebugBiomes) {
             this.materialCache = materialCache;
@@ -156,11 +155,11 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
             this.threadBridge = threadBridge;
             this.defaultBiomeId = defaultBiomeId;
             this.useDebugBiomes = useDebugBiomes;
-            this.previousLabelRegistry = new Registry<>();
+            this.defaultDebugMaterial = new MaterialAsset("Cloth_Block_Wool_White", "Empty", false).build(materialCache);
             this.biomeIdRegistry = new Registry<>();
             this.biomesById = new HashMap<>();
             this.biomeRemap = new ArrayList<>();
-            this.defaultDebugMaterial = new MaterialAsset("Cloth_Block_Wool_White", "Empty", false).build(materialCache);
+            this.stageLabels = new ArrayList<>();
         }
 
         public Argument(@Nonnull Argument argument) {
@@ -171,16 +170,11 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
             this.threadBridge = argument.threadBridge;
             this.defaultBiomeId = argument.defaultBiomeId;
             this.useDebugBiomes = argument.useDebugBiomes;
-            this.previousLabelRegistry = argument.previousLabelRegistry;
+            this.defaultDebugMaterial = argument.defaultDebugMaterial;
             this.biomeIdRegistry = argument.biomeIdRegistry;
             this.biomesById = argument.biomesById;
             this.biomeRemap = argument.biomeRemap;
-            this.defaultDebugMaterial = argument.defaultDebugMaterial;
-        }
-
-        public int getPreviousId(String previousLabel) {
-            if (previousLabel.isEmpty()) return -1;
-            return previousLabelRegistry.getIdOrRegister(previousLabel);
+            this.stageLabels = argument.stageLabels;
         }
 
         public int getBiomeId(String biomeId, @Nullable Material material) {
@@ -223,6 +217,36 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
             }
 
             return biomeRemapArray;
+        }
+
+        public void pushStageLabel(@Nullable String label, @Nonnull BiomeProvider biomeProvider) {
+            stageLabels.add(new StagedBiomeProviderLabel(label, biomeProvider));
+        }
+
+        public void popStageLabel() {
+            stageLabels.removeLast();
+        }
+
+        public BiomeProvider getPreviousWithLabel(String stageLabel) {
+            for (int i = stageLabels.size() - 1; i >= 0; i--) {
+                StagedBiomeProviderLabel label = stageLabels.get(i);
+                if (stageLabel == null || stageLabel.equals(label.label)) return label.biomeProvider;
+                return stageLabels.getFirst().biomeProvider;
+            }
+
+            return null;
+        }
+
+        public static class StagedBiomeProviderLabel {
+            @Nullable
+            public String label;
+            @Nonnull
+            public BiomeProvider biomeProvider;
+
+            public StagedBiomeProviderLabel(@Nullable String label, @Nonnull BiomeProvider biomeProvider) {
+                this.label = label;
+                this.biomeProvider = biomeProvider;
+            }
         }
     }
 

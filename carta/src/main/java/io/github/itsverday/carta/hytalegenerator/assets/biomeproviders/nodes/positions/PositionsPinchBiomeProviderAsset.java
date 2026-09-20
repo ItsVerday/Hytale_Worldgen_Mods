@@ -9,7 +9,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.validation.Validators;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.PositionsPinch2DBiomeProvider;
 import it.unimi.dsi.fastutil.doubles.Double2DoubleFunction;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -76,7 +75,7 @@ public class PositionsPinchBiomeProviderAsset extends BiomeProviderAsset {
 
         PositionProvider positions = positionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge));
         Double2DoubleFunction pinchCurve = pinchCurveAsset.build();
-        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, rounding);
+        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, rounding);
 
         return new PositionsPinch2DBiomeProvider(input, positions, pinchCurve, maxDistance, normalizeDistance, rounding);
     }

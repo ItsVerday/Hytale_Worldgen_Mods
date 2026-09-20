@@ -6,7 +6,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.StagedBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -41,15 +40,23 @@ public class StagedBiomeProviderAsset extends BiomeProviderAsset {
     public BiomeProvider build(@NonNullDecl Argument argument) {
         if (isSkipped()) return null;
 
+        String previousLabelNullable = previousLabel;
+        if (previousLabelNullable.isEmpty()) previousLabelNullable = null;
+
+        BiomeProvider previousInput = null;
+
         List<BiomeProvider> inputs = new ArrayList<>();
         for (BiomeProviderAsset inputAsset: inputAssets) {
+            if (previousInput != null) argument.pushStageLabel(previousLabelNullable, previousInput);
+
             BiomeProvider input = inputAsset.build(argument);
+            if (previousInput != null) argument.popStageLabel();
             if (input == null) continue;
 
-            inputs.add(input.makeCached());
+            previousInput = input.makeCached();
         }
 
-        return new StagedBiomeProvider(inputs, argument.getPreviousId(previousLabel));
+        return previousInput;
     }
 
     @Override

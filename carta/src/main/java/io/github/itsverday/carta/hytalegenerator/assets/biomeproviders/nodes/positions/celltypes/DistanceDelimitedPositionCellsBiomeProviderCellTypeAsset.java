@@ -11,7 +11,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.positions.PositionCellsBiomeProviderCellTypeAsset;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.PositionCellsBiomeProviderCellType;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.celltypes.DistanceDelimitedPositionCellsBiomeProviderCellType;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.positions.celltypes.FillPositionCellsBiomeProviderCellType;
@@ -38,15 +37,15 @@ public class DistanceDelimitedPositionCellsBiomeProviderCellTypeAsset extends Po
 
     @NonNullDecl
     @Override
-    public PositionCellsBiomeProviderCellType build(@NonNullDecl BiomeProviderAsset.Argument argument, BiomeProvider fallback) {
+    public PositionCellsBiomeProviderCellType build(@NonNullDecl BiomeProviderAsset.Argument argument) {
         List<DistanceDelimitedPositionCellsBiomeProviderCellType.DistanceDelimiter> delimiters = new ArrayList<>();
         for (DistanceDelimiterAsset delimiterAsset: delimiterAssets) {
             if (delimiterAsset.input == null) continue;
-            DistanceDelimitedPositionCellsBiomeProviderCellType.DistanceDelimiter delimiter = new DistanceDelimitedPositionCellsBiomeProviderCellType.DistanceDelimiter(delimiterAsset.input.build(argument, fallback), delimiterAsset.minimum, delimiterAsset.maximum);
+            DistanceDelimitedPositionCellsBiomeProviderCellType.DistanceDelimiter delimiter = new DistanceDelimitedPositionCellsBiomeProviderCellType.DistanceDelimiter(delimiterAsset.input.build(argument), delimiterAsset.minimum, delimiterAsset.maximum);
             delimiters.add(delimiter);
         }
 
-        FillPositionCellsBiomeProviderCellType fallbackCellType = new FillPositionCellsBiomeProviderCellType(fallback, 0.0);
+        FillPositionCellsBiomeProviderCellType fallbackCellType = new FillPositionCellsBiomeProviderCellType(argument.getPreviousWithLabel(null), 0.0);
         return new DistanceDelimitedPositionCellsBiomeProviderCellType(fallbackCellType, delimiters, getWeight());
     }
 

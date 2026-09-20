@@ -21,7 +21,6 @@ import io.github.itsverday.carta.CartaPlugin;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.ImageMap2DBiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.joml.Vector3d;
@@ -110,12 +109,12 @@ public class ImageMapBiomeProviderAsset extends BiomeProviderAsset {
 
     public BiomeProvider build(@NonNullDecl Argument argument) {
         try {
-            if (path == null) return new PreviousBiomeProvider();
+            if (path == null) return argument.getPreviousWithLabel(null);
 
             Path filePath = resolvePath(path);
             if (filePath == null) {
                 CartaPlugin.LOGGER.atWarning().log("BiomeMap Image with path '%s' does not exist!", path);
-                return new PreviousBiomeProvider();
+                return argument.getPreviousWithLabel(null);
             }
 
             BufferedImage image = ImageIO.read(Files.newInputStream(filePath));
@@ -144,14 +143,14 @@ public class ImageMapBiomeProviderAsset extends BiomeProviderAsset {
 
             List<BiomeProvider> biomeTable = new ArrayList<>();
             for (ImageMapBiomeAsset biomeAsset : biomeAssets) {
-                biomeTable.add(BiomeProviderAsset.buildStatic(biomeAsset.input, argument, PreviousBiomeProvider::new, false));
+                biomeTable.add(BiomeProviderAsset.buildStatic(biomeAsset.input, argument, false));
             }
 
-            BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, PreviousBiomeProvider::new, false);
+            BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, false);
             return new ImageMap2DBiomeProvider(fallback, biomeTable, biomeIndices, image.getWidth(), new Vector3d(centerX, 0, centerZ), scale, rotation, flip, edgeType);
         } catch (Exception e) {
             CartaPlugin.LOGGER.atWarning().withCause(e).log("Could not load image for ImageMapBiomeProviderAsset!");
-            return new PreviousBiomeProvider();
+            return argument.getPreviousWithLabel(null);
         }
     }
 

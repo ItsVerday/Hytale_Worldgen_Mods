@@ -7,7 +7,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.VectorWarpBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -65,7 +64,7 @@ public class VectorWarpBiomeProviderAsset extends BiomeProviderAsset {
         if (warpVectorX == 0 && warpVectorZ == 0) return null;
 
         Density density = densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge)));
-        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, rounding);
+        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, rounding);
         Vector3d warpVector = new Vector3d(warpVectorX, 0, warpVectorZ);
 
         return new VectorWarpBiomeProvider(input, density, warpVector, rounding);

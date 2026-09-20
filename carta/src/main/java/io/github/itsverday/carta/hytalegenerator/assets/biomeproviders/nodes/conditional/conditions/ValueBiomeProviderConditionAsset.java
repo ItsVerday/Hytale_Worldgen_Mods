@@ -6,7 +6,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.conditional.BiomeProviderConditionAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.conditional.BiomeProviderCondition;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.conditional.conditions.ConstantBiomeProviderCondition;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.conditional.conditions.ValueBiomeProviderCondition;
@@ -40,7 +39,7 @@ public class ValueBiomeProviderConditionAsset extends BiomeProviderConditionAsse
     public BiomeProviderCondition build(@NonNullDecl BiomeProviderAsset.Argument argument) {
         if (biome.isEmpty()) return new ConstantBiomeProviderCondition(false);
 
-        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, false);
+        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, false);
         return new ValueBiomeProviderCondition(input, argument.getBiomeId(biome, null));
     }
 

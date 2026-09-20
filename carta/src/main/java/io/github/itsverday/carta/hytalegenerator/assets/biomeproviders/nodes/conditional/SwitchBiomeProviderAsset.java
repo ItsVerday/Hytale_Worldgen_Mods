@@ -11,7 +11,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.conditional.ConditionalBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -46,7 +45,7 @@ public class SwitchBiomeProviderAsset extends BiomeProviderAsset {
     public BiomeProvider build(@NonNullDecl Argument argument) {
         if (isSkipped()) return null;
 
-        BiomeProvider ifFalse = BiomeProviderAsset.buildStatic(fallbackAsset, argument, PreviousBiomeProvider::new, false);
+        BiomeProvider ifFalse = BiomeProviderAsset.buildStatic(fallbackAsset, argument, false);
         for (SwitchCaseAsset caseAsset: List.of(caseAssets).reversed()) {
             if (caseAsset.skip) continue;
             if (caseAsset.conditionAsset == null) continue;

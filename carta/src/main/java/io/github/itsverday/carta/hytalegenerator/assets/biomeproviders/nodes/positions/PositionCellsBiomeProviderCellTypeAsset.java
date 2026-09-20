@@ -39,7 +39,7 @@ public abstract class PositionCellsBiomeProviderCellTypeAsset implements Cleanab
     private double weight;
 
     @Nonnull
-    public abstract PositionCellsBiomeProviderCellType build(@Nonnull BiomeProviderAsset.Argument argument, BiomeProvider fallback);
+    public abstract PositionCellsBiomeProviderCellType build(@Nonnull BiomeProviderAsset.Argument argument);
 
     @Override
     public String getId() {

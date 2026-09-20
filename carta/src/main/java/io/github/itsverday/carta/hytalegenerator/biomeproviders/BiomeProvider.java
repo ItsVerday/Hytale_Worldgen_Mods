@@ -28,39 +28,27 @@ public abstract class BiomeProvider {
         public Vector3d position;
         public Vector3d anchor;
         public WorkerIndexer.Id workerId;
-        public BiomeProvider previous;
-        public Integer previousIndex;
-        public Context fallback;
 
         public Context() {
-            this(new Vector3d(), null, null, null, 0);
+            this(new Vector3d(), null, null);
         }
 
-        public Context(Vector3d position, Vector3d anchor, WorkerIndexer.Id workerId, BiomeProvider previous, int previousIndex) {
+        public Context(Vector3d position, Vector3d anchor, WorkerIndexer.Id workerId) {
             this.position = position;
             this.anchor = anchor;
             this.workerId = workerId;
-            this.previous = previous;
-            this.previousIndex = previousIndex;
-            this.fallback = null;
         }
 
         public void assign(Context context) {
             this.position = context.position;
             this.anchor = context.anchor;
             this.workerId = context.workerId;
-            this.previous = context.previous;
-            this.previousIndex = context.previousIndex;
-            this.fallback = context.fallback;
         }
 
-        public void assign(Vector3d position, Vector3d anchor, WorkerIndexer.Id workerId, BiomeProvider previous, int previousIndex, Context fallback) {
+        public void assign(Vector3d position, Vector3d anchor, WorkerIndexer.Id workerId) {
             this.position = position;
             this.anchor = anchor;
             this.workerId = workerId;
-            this.previous = previous;
-            this.previousIndex = previousIndex;
-            this.fallback = fallback;
         }
     }
 }

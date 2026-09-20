@@ -10,7 +10,6 @@ import com.hypixel.hytale.codec.validation.Validators;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.GradientWarp2DBiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.PreviousBiomeProvider;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -68,7 +67,7 @@ public class GradientWarpBiomeProviderAsset extends BiomeProviderAsset {
         if (warpFactor == 0) return null;
 
         Density density = new MultiCacheDensity(densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge))), 3);
-        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, rounding);
+        BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, rounding);
 
         return new GradientWarp2DBiomeProvider(input, density, sampleDistance, warpFactor, rounding);
     }
