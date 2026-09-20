@@ -57,7 +57,7 @@ public class DensityDistanceBiomeProviderConditionAsset extends BiomeProviderCon
         if (inputAsset == null) return new ConstantBiomeProviderCondition(false);
         if (densityAsset == null) return new ConstantBiomeProviderCondition(false);
 
-        Density density = densityAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId));
+        Density density = densityAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge));
         return new DensityDistance2DBiomeProviderCondition(inputAsset.build(argument), density, minDistance, maxDistance);
     }
 

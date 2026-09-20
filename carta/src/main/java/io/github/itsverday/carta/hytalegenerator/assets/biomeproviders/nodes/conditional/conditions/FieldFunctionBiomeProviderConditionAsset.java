@@ -46,7 +46,7 @@ public class FieldFunctionBiomeProviderConditionAsset extends BiomeProviderCondi
     public BiomeProviderCondition build(@NonNullDecl BiomeProviderAsset.Argument argument) {
         if (densityAsset == null) return new ConstantBiomeProviderCondition(false);
 
-        Density density = densityAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId));
+        Density density = densityAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge));
         return new FieldFunctionBiomeProviderCondition(density, minimum, maximum);
     }
 

@@ -74,7 +74,7 @@ public class PositionsTwistBiomeProviderAsset extends BiomeProviderAsset {
         if (positionsAsset == null) return null;
         if (twistCurveAsset == null) return null;
 
-        PositionProvider positions = positionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId));
+        PositionProvider positions = positionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge));
         Double2DoubleFunction twistCurve = twistCurveAsset.build();
         BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, rounding);
 

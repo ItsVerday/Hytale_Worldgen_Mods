@@ -11,3 +11,7 @@ This mod adds Asset Folders for the following asset types:
 - Curve (Asset Folder: `Server/HytaleGenerator/Curves`)
 - MaterialProvider (Asset Folder: `Server/HytaleGenerator/MaterialProviders`)
 - VectorProvider (Asset Folder: `Server/HytaleGenerator/VectorProviders`)
+- Graph EdgeAction (Asset Folder: `Server/HytaleGenerator/EdgeActions`)
+- Graph EdgeSelector (Asset Folder: `Server/HytaleGenerator/EdgeSelectors`)
+- Graph NodeAction (Asset Folder: `Server/HytaleGenerator/NodeActions`)
+- Graph NodeSelector (Asset Folder: `Server/HytaleGenerator/NodeSelectors`)

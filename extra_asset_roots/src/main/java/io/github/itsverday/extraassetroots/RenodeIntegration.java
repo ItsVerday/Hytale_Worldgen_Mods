@@ -15,6 +15,10 @@ public class RenodeIntegration {
     public static final AbstractNodeRoot ROOT_CURVES = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_CURVES, "HytaleGenerator - Curve"));
     public static final AbstractNodeRoot ROOT_MATERIAL_PROVIDERS = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_MATERIAL_PROVIDERS, "HytaleGenerator - MaterialProvider"));
     public static final AbstractNodeRoot ROOT_VECTOR_PROVIDERS = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_VECTOR_PROVIDERS, "HytaleGenerator - VectorProvider"));
+    public static final AbstractNodeRoot ROOT_EDGE_ACTIONS = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_GRAPH_EDGE_ACTIONS, "HytaleGenerator - EdgeAction"));
+    public static final AbstractNodeRoot ROOT_EDGE_SELECTORS = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_GRAPH_EDGE_SELECTORS, "HytaleGenerator - EdgeSelector"));
+    public static final AbstractNodeRoot ROOT_NODE_ACTIONS = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_GRAPH_NODE_ACTIONS, "HytaleGenerator - NodeAction"));
+    public static final AbstractNodeRoot ROOT_NODE_SELECTORS = addRoot(Renode.root(HytaleGeneratorNodes.VARIANT_GRAPH_NODE_SELECTORS, "HytaleGenerator - NodeSelector"));
 
     private static AbstractNodeRoot addRoot(AbstractNodeRoot root) {
         roots.add(root);

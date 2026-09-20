@@ -2,9 +2,9 @@ package io.github.itsverday.carta.hytalegenerator.biomes;
 
 import com.hypixel.hytale.builtin.hytalegenerator.PropRuntime;
 import com.hypixel.hytale.builtin.hytalegenerator.biome.Biome;
+import com.hypixel.hytale.builtin.hytalegenerator.density.BaseHeightDensity;
 import com.hypixel.hytale.builtin.hytalegenerator.density.Density;
-import com.hypixel.hytale.builtin.hytalegenerator.density.nodes.BaseHeightDensity;
-import com.hypixel.hytale.builtin.hytalegenerator.density.nodes.InverterDensity;
+import com.hypixel.hytale.builtin.hytalegenerator.density.InverterDensity;
 import com.hypixel.hytale.builtin.hytalegenerator.environmentproviders.EnvironmentProvider;
 import com.hypixel.hytale.builtin.hytalegenerator.material.Material;
 import com.hypixel.hytale.builtin.hytalegenerator.materialproviders.ConstantMaterialProvider;

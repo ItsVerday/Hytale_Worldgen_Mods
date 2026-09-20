@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RenodePlugin extends JavaPlugin {
+    public final static HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static RenodePlugin instance = null;
 
     private final Config<RenodeConfiguration> config;
-    private final static HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final NodeRegistry registry = new NodeRegistry();
     private static List<NodeWorkspace> workspaces = null;
     private final List<WorkspaceExporter> exporters = new ArrayList<>();

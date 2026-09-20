@@ -2,7 +2,7 @@ package io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes;
 
 import com.hypixel.hytale.builtin.hytalegenerator.assets.density.DensityAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.density.Density;
-import com.hypixel.hytale.builtin.hytalegenerator.density.nodes.MultiCacheDensity;
+import com.hypixel.hytale.builtin.hytalegenerator.density.MultiCacheDensity;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -67,7 +67,7 @@ public class GradientWarpBiomeProviderAsset extends BiomeProviderAsset {
         if (sampleDistance == 0) return null;
         if (warpFactor == 0) return null;
 
-        Density density = new MultiCacheDensity(densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId))), 3);
+        Density density = new MultiCacheDensity(densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge))), 3);
         BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, rounding);
 
         return new GradientWarp2DBiomeProvider(input, density, sampleDistance, warpFactor, rounding);

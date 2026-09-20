@@ -9,10 +9,15 @@ import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.AssetManager;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.curves.CurveAsset;
+import com.hypixel.hytale.builtin.hytalegenerator.assets.graph.edgeactions.EdgeActionAsset;
+import com.hypixel.hytale.builtin.hytalegenerator.assets.graph.edgeselectors.EdgeSelectorAsset;
+import com.hypixel.hytale.builtin.hytalegenerator.assets.graph.nodeactions.NodeActionAsset;
+import com.hypixel.hytale.builtin.hytalegenerator.assets.graph.nodeselectors.NodeSelectorAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.materialproviders.MaterialProviderAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.patterns.PatternAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.scanners.ScannerAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.vectorproviders.VectorProviderAsset;
+import com.hypixel.hytale.builtin.hytalegenerator.graph.edgeselectors.EdgeSelector;
 import com.hypixel.hytale.builtin.hytalegenerator.plugin.HytaleGenerator;
 import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.common.semver.SemverRange;
@@ -56,6 +61,10 @@ public class ExtraAssetRootsPlugin extends JavaPlugin {
         registerAssetStore(CurveAsset.class, "HytaleGenerator/Curves", CurveAsset::getId, CurveAsset.CODEC);
         registerAssetStore(MaterialProviderAsset.class, "HytaleGenerator/MaterialProviders", MaterialProviderAsset::getId, MaterialProviderAsset.CODEC);
         registerAssetStore(VectorProviderAsset.class, "HytaleGenerator/VectorProviders", VectorProviderAsset::getId, VectorProviderAsset.CODEC);
+        registerAssetStore(EdgeActionAsset.class, "HytaleGenerator/EdgeActions", EdgeActionAsset::getId, EdgeActionAsset.CODEC);
+        registerAssetStore(EdgeSelectorAsset.class, "HytaleGenerator/EdgeSelectors", EdgeSelectorAsset::getId, EdgeSelectorAsset.CODEC);
+        registerAssetStore(NodeActionAsset.class, "HytaleGenerator/NodeActions", NodeActionAsset::getId, NodeActionAsset.CODEC);
+        registerAssetStore(NodeSelectorAsset.class, "HytaleGenerator/NodeSelectors", NodeSelectorAsset::getId, NodeSelectorAsset.CODEC);
 
         if (PluginManager.get().hasPlugin(PluginIdentifier.fromString("Verday:Renode"), SemverRange.fromString("${RENODE_CHECK_VERSION}"))) {
             try {

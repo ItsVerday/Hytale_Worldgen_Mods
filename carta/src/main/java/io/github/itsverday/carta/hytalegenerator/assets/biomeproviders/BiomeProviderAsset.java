@@ -10,6 +10,7 @@ import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.builtin.hytalegenerator.Registry;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.Cleanable;
+import com.hypixel.hytale.builtin.hytalegenerator.assets.ThreadBridge;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.biomes.BiomeAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.material.MaterialAsset;
 import com.hypixel.hytale.builtin.hytalegenerator.biome.Biome;
@@ -138,6 +139,7 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
         public SeedBox parentSeed;
         public ReferenceBundle referenceBundle;
         public WorkerIndexer.Id workerId;
+        public ThreadBridge threadBridge;
         public String defaultBiomeId;
         public boolean useDebugBiomes;
         public Material defaultDebugMaterial;
@@ -146,11 +148,12 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
         public final HashMap<String, Biome> biomesById;
         public final List<Integer> biomeRemap;
 
-        public Argument(@Nonnull MaterialCache materialCache, @Nonnull SeedBox parentSeed, @Nonnull ReferenceBundle referenceBundle, @Nonnull WorkerIndexer.Id workerId, @Nonnull String defaultBiomeId, boolean useDebugBiomes) {
+        public Argument(@Nonnull MaterialCache materialCache, @Nonnull SeedBox parentSeed, @Nonnull ReferenceBundle referenceBundle, @Nonnull WorkerIndexer.Id workerId, @Nonnull ThreadBridge threadBridge, @Nonnull String defaultBiomeId, boolean useDebugBiomes) {
             this.materialCache = materialCache;
             this.parentSeed = parentSeed;
             this.referenceBundle = referenceBundle;
             this.workerId = workerId;
+            this.threadBridge = threadBridge;
             this.defaultBiomeId = defaultBiomeId;
             this.useDebugBiomes = useDebugBiomes;
             this.previousLabelRegistry = new Registry<>();
@@ -165,6 +168,7 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
             this.parentSeed = argument.parentSeed;
             this.referenceBundle = argument.referenceBundle;
             this.workerId = argument.workerId;
+            this.threadBridge = argument.threadBridge;
             this.defaultBiomeId = argument.defaultBiomeId;
             this.useDebugBiomes = argument.useDebugBiomes;
             this.previousLabelRegistry = argument.previousLabelRegistry;
@@ -190,7 +194,7 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
                 if (!biomesById.containsKey(biomeId) || biomesById.get(biomeId) instanceof DebugBiome) {
                     BiomeAsset biomeAsset = BiomeAsset.getAssetStore().getAssetMap().getAsset(biomeId);
                     if (biomeAsset != null) {
-                        biomesById.put(biomeId, biomeAsset.build(materialCache, parentSeed, referenceBundle, workerId));
+                        biomesById.put(biomeId, biomeAsset.build(materialCache, parentSeed, referenceBundle, workerId, threadBridge));
                     }
                 }
             }

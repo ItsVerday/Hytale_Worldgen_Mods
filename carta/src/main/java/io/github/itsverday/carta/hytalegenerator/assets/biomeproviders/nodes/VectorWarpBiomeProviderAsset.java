@@ -64,7 +64,7 @@ public class VectorWarpBiomeProviderAsset extends BiomeProviderAsset {
         if (densityAsset == null) return null;
         if (warpVectorX == 0 && warpVectorZ == 0) return null;
 
-        Density density = densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId)));
+        Density density = densityAsset.build(new DensityAsset.Argument(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge)));
         BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, PreviousBiomeProvider::new, rounding);
         Vector3d warpVector = new Vector3d(warpVectorX, 0, warpVectorZ);
 

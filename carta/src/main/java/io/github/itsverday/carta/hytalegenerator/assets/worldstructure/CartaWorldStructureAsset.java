@@ -96,7 +96,7 @@ public class CartaWorldStructureAsset extends WorldStructureAsset {
             frameworkAsset.build(argument, referenceBundle);
         }
 
-        BiomeProviderAsset.Argument biomeProviderArgument = new BiomeProviderAsset.Argument(argument.materialCache, argument.parentSeed, referenceBundle, argument.workerId, defaultBiomeId, useDebugBiomes);
+        BiomeProviderAsset.Argument biomeProviderArgument = new BiomeProviderAsset.Argument(argument.materialCache, argument.parentSeed, referenceBundle, argument.workerId, argument.threadBridge, defaultBiomeId, useDebugBiomes);
         BiomeProvider defaultBiomeProvider = new ConstantBiomeProvider(biomeProviderArgument.getBiomeId(defaultBiomeId, null));
         if (!biomeProviderArgument.biomesById.containsKey(defaultBiomeId)) {
             CartaPlugin.LOGGER.atSevere().log("Default Biome with id '%s' does not exist!", defaultBiomeId);
@@ -112,7 +112,7 @@ public class CartaWorldStructureAsset extends WorldStructureAsset {
         Registry<Biome> biomeRegistry = biomeProviderArgument.buildBiomeRegistry();
         BiomeProviderCarta carta = new BiomeProviderCarta(biomeProvider, defaultBiomeProvider, biomeProviderArgument.buildBiomeRemap());
         int defaultRadius = Math.max(1, biomeTransitionDistance / 2);
-        PositionProvider spawnPositions = spawnPositionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, referenceBundle, argument.workerId));
+        PositionProvider spawnPositions = spawnPositionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, referenceBundle, argument.workerId, argument.threadBridge));
 
         return new WorldStructure(carta, biomeRegistry, defaultRadius, maxBiomeEdgeDistance, spawnPositions);
     }

@@ -1,7 +1,7 @@
 {
     "Group": "Verday",
     "Name": "Renode",
-    "Version": "0.8.0",
+    "Version": "0.9.0",
     "Description": "Plugin/Library to perform automatic node config generation for the Asset Node Editor.",
     "Authors": [
         {
@@ -9,7 +9,7 @@
         }
     ],
     "Website": "https://github.com/ItsVerday/Hytale_Worldgen_Mods",
-    "ServerVersion": ">=0.5.4",
+    "ServerVersion": ">=0.6.8",
     "Dependencies": {
         
     },

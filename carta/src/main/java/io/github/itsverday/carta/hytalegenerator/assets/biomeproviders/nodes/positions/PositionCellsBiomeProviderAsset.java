@@ -92,10 +92,10 @@ public class PositionCellsBiomeProviderAsset extends BiomeProviderAsset {
         if (positionsAsset == null) return null;
         if (maxDistance - distanceWarpMin <= 0) return null;
 
-        PositionProvider positions = positionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId));
+        PositionProvider positions = positionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge));
         BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, PreviousBiomeProvider::new, false);
         SeedBox childSeed = argument.parentSeed.child(seed);
-        Density distanceWarpField = distanceWarpFieldAsset != null ? distanceWarpFieldAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId)) : null;
+        Density distanceWarpField = distanceWarpFieldAsset != null ? distanceWarpFieldAsset.build(new DensityAsset.Argument(argument.parentSeed, argument.referenceBundle, argument.workerId, argument.threadBridge)) : null;
         List<PositionCellsBiomeProviderCellType> cellTypes = new ArrayList<>();
         for (PositionCellsBiomeProviderCellTypeAsset cellTypeAsset: cellTypeAssets) {
             cellTypes.add(cellTypeAsset.build(argument, fallback));
