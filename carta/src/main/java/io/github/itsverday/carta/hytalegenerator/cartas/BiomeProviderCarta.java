@@ -10,15 +10,13 @@ import java.util.List;
 
 public class BiomeProviderCarta extends BiCarta<Integer> {
     private final BiomeProvider biomeProvider;
-    private final BiomeProvider baseFallback;
     private final int[] biomeRemap;
 
     private final Vector3d rPosition = new Vector3d();
     private final BiomeProvider.Context rContext = new BiomeProvider.Context();
 
-    public BiomeProviderCarta(BiomeProvider biomeProvider, BiomeProvider baseFallback, int[] biomeRemap) {
+    public BiomeProviderCarta(BiomeProvider biomeProvider, int[] biomeRemap) {
         this.biomeProvider = biomeProvider;
-        this.baseFallback = baseFallback;
         this.biomeRemap = biomeRemap;
     }
 

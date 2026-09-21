@@ -111,7 +111,7 @@ public class CartaWorldStructureAsset extends WorldStructureAsset {
 
         BiomeProvider biomeProvider = biomeProviderAsset.build(biomeProviderArgument);
         Registry<Biome> biomeRegistry = biomeProviderArgument.buildBiomeRegistry();
-        BiomeProviderCarta carta = new BiomeProviderCarta(biomeProvider, defaultBiomeProvider, biomeProviderArgument.buildBiomeRemap());
+        BiomeProviderCarta carta = new BiomeProviderCarta(biomeProvider, biomeProviderArgument.buildBiomeRemap());
         int defaultRadius = Math.max(1, biomeTransitionDistance / 2);
         PositionProvider spawnPositions = spawnPositionsAsset.build(new PositionProviderAsset.Argument(argument.parentSeed, referenceBundle, argument.workerId, argument.threadBridge));
 
