@@ -5,8 +5,10 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.validation.Validators;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.BiomeProviderAsset;
+import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.scanners.BiomeProviderScannerAsset;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.Smoothed2DBiomeProvider;
+import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.SmoothedBiomeProvider;
+import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.scanners.BiomeProviderScanner;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -29,11 +31,10 @@ public class SmoothedBiomeProviderAsset extends BiomeProviderAsset {
             )
             .add()
             .append(
-                    new KeyedCodec<>("Radius", Codec.DOUBLE, true),
-                    (asset, field) -> asset.radius = field,
-                    asset -> asset.radius
+                    new KeyedCodec<>("Scanner", BiomeProviderScannerAsset.CODEC, false),
+                    (asset, field) -> asset.scannerAsset = field,
+                    asset -> asset.scannerAsset
             )
-            .addValidator(Validators.greaterThanOrEqual(0.0))
             .add()
             .append(
                     new KeyedCodec<>("Threshold", Codec.DOUBLE, true),
@@ -44,10 +45,10 @@ public class SmoothedBiomeProviderAsset extends BiomeProviderAsset {
             .add()
             .build();
 
-    private double radius;
-    private double threshold;
     private BiomeProviderAsset inputAsset = null;
     private BiomeProviderAsset fallbackAsset = null;
+    private BiomeProviderScannerAsset scannerAsset = null;
+    private double threshold;
 
     @NullableDecl
     @Override
@@ -55,10 +56,11 @@ public class SmoothedBiomeProviderAsset extends BiomeProviderAsset {
         if (isSkipped()) return null;
 
         BiomeProvider input = BiomeProviderAsset.buildStatic(inputAsset, argument, true);
-        if (radius == 0.0) return input;
+        if (scannerAsset == null) return input;
 
+        BiomeProviderScanner scanner = scannerAsset.build(argument);
         BiomeProvider fallback = BiomeProviderAsset.buildStatic(fallbackAsset, argument, true);
-        return new Smoothed2DBiomeProvider(input.makeCached(), fallback, radius, threshold);
+        return new SmoothedBiomeProvider(input.makeCached(), fallback, scanner, threshold);
     }
 
     @Override

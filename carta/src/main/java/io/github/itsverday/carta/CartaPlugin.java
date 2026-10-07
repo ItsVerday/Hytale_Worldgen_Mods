@@ -32,6 +32,8 @@ import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.pos
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.positions.celltypes.DistanceDelimitedPositionCellsBiomeProviderCellTypeAsset;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.positions.celltypes.FillPositionCellsBiomeProviderCellTypeAsset;
 import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.positions.celltypes.OriginPositionCellsBiomeProviderCellTypeAsset;
+import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.scanners.BiomeProviderScannerAsset;
+import io.github.itsverday.carta.hytalegenerator.assets.biomeproviders.nodes.scanners.nodes.*;
 import io.github.itsverday.carta.hytalegenerator.assets.worldstructure.CartaWorldStructureAsset;
 
 import javax.annotation.Nonnull;
@@ -91,18 +93,25 @@ public class CartaPlugin extends JavaPlugin {
                 .register("Weighted", WeightedBiomeProviderAsset.class, WeightedBiomeProviderAsset.CODEC);
 
         getCodecRegistry(BiomeProviderConditionAsset.CODEC)
-                .register("Adjacent", AdjacentBiomeProviderConditionAsset.class, AdjacentBiomeProviderConditionAsset.CODEC)
                 .register("And", AndBiomeProviderConditionAsset.class, AndBiomeProviderConditionAsset.CODEC)
-                .register("DensityDistance", DensityDistanceBiomeProviderConditionAsset.class, DensityDistanceBiomeProviderConditionAsset.CODEC)
-                .register("Distance", DistanceBiomeProviderConditionAsset.class, DistanceBiomeProviderConditionAsset.CODEC)
                 .register("FieldFunction", FieldFunctionBiomeProviderConditionAsset.class, FieldFunctionBiomeProviderConditionAsset.CODEC)
                 .register("Imported", ImportedBiomeProviderConditionAsset.class, ImportedBiomeProviderConditionAsset.CODEC)
                 .register("Not", NotBiomeProviderConditionAsset.class, NotBiomeProviderConditionAsset.CODEC)
                 .register("Offset", OffsetBiomeProviderConditionAsset.class, OffsetBiomeProviderConditionAsset.CODEC)
                 .register("Or", OrBiomeProviderConditionAsset.class, OrBiomeProviderConditionAsset.CODEC)
+                .register("Scanner", ScannerBiomeProviderConditionAsset.class, ScannerBiomeProviderConditionAsset.CODEC)
                 .register("SumRange", SumRangeBiomeProviderConditionAsset.class, SumRangeBiomeProviderConditionAsset.CODEC)
                 .register("Value", ValueBiomeProviderConditionAsset.class, ValueBiomeProviderConditionAsset.CODEC)
                 .register("Values", ValuesBiomeProviderConditionAsset.class, ValuesBiomeProviderConditionAsset.CODEC);
+
+        getCodecRegistry(BiomeProviderScannerAsset.CODEC)
+                .register("Adjacent2D", Adjacent2DBiomeProviderScannerAsset.class, Adjacent2DBiomeProviderScannerAsset.CODEC)
+                .register("DensityRound2D", DensityRound2DBiomeProviderScannerAsset.class, DensityRound2DBiomeProviderScannerAsset.CODEC)
+                .register("Imported", ImportedBiomeProviderScannerAsset.class, ImportedBiomeProviderScannerAsset.CODEC)
+                .register("Offset", OffsetBiomeProviderScannerAsset.class, OffsetBiomeProviderScannerAsset.CODEC)
+                .register("Origin", OriginBiomeProviderScannerAsset.class, OriginBiomeProviderScannerAsset.CODEC)
+                .register("Round2D", Round2DBiomeProviderScannerAsset.class, Round2DBiomeProviderScannerAsset.CODEC)
+                .register("Union", UnionBiomeProviderScannerAsset.class, UnionBiomeProviderScannerAsset.CODEC);
 
         getCodecRegistry(PositionCellsBiomeProviderCellTypeAsset.CODEC)
                 .register("DistanceDelimited", DistanceDelimitedPositionCellsBiomeProviderCellTypeAsset.class, DistanceDelimitedPositionCellsBiomeProviderCellTypeAsset.CODEC)
@@ -125,8 +134,17 @@ public class CartaPlugin extends JavaPlugin {
                 .build()
         );
 
+        getAssetRegistry().register(
+                HytaleAssetStore.builder(BiomeProviderScannerAsset.class, new DefaultAssetMap<>())
+                .setPath("HytaleGenerator/BiomeProviderScanners")
+                .setKeyFunction(BiomeProviderScannerAsset::getId)
+                .setCodec(BiomeProviderScannerAsset.CODEC)
+                .build()
+        );
+
         getEventRegistry().register(LoadedAssetsEvent.class, BiomeProviderAsset.class, this::biomeProvidersReloaded);
         getEventRegistry().register(LoadedAssetsEvent.class, BiomeProviderConditionAsset.class, this::biomeProviderConditionsReloaded);
+        getEventRegistry().register(LoadedAssetsEvent.class, BiomeProviderScannerAsset.class, this::biomeScannersReloaded);
         getEventRegistry().register(LoadAssetEvent.class, event -> {
             for (AssetPack pack: AssetModule.get().getAssetPacks()) {
                 onAssetPackLoaded(pack);
@@ -150,6 +168,10 @@ public class CartaPlugin extends JavaPlugin {
     }
 
     private void biomeProviderConditionsReloaded(@Nonnull LoadedAssetsEvent<String, BiomeProviderConditionAsset, DefaultAssetMap<String, BiomeProviderConditionAsset>> event) {
+        triggerReload();
+    }
+
+    private void biomeScannersReloaded(@Nonnull LoadedAssetsEvent<String, BiomeProviderScannerAsset, DefaultAssetMap<String, BiomeProviderScannerAsset>> event) {
         triggerReload();
     }
 

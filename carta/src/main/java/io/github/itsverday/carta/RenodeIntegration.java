@@ -21,6 +21,7 @@ public class RenodeIntegration {
     public static final NodeCategory CATEGORY_BIOME_PROVIDERS = addCategory(Renode.category("Biome Providers", "27,150,62"));
     public static final NodeVariantClass VARIANT_BIOME_PROVIDERS = addVariant(Renode.variant("BiomeProvider", "27,150,62"));
     public static final NodeVariantClass VARIANT_BIOME_PROVIDER_CONDITIONS = addVariant(Renode.variant("BiomeProviderConditions", "230,199,28"));
+    public static final NodeVariantClass VARIANT_BIOME_PROVIDER_SCANNERS = addVariant(Renode.variant("BiomeProviderScanners", "230,199,28"));
     public static final NodeVariantClass VARIANT_BIOME_PROVIDER_POSITION_CELLS_CELL_TYPES = addVariant(Renode.variant("PositionCellsBiomeProviderCellType", "27,168,138"));
 
     public static final NodeBuilder NODE_BIOME_PROVIDER_ANCHOR = addNode(VARIANT_BIOME_PROVIDERS.variantNode("Anchor", "Anchor BiomeProvider"))
@@ -50,38 +51,11 @@ public class RenodeIntegration {
             .addVariantOutput("IfTrue", "IfTrue", false, VARIANT_BIOME_PROVIDERS, "Input BiomeProvider, which is used if the condition is true.")
             .addVariantOutput("IfFalse", "IfFalse", false, VARIANT_BIOME_PROVIDERS, "Input BiomeProvider, which is used if the condition is false.")
             .addCategory(CATEGORY_BIOME_PROVIDERS);
-    public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_ADJACENT = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("Adjacent", "Adjacent BiomeProviderCondition"))
-            .withDescription("Checks if any adjacent position (1 block in any of the 4 cardinal directions) matches the child condition (Input).\n" +
-                    "If any of the 4 checked locations satisfy the child condition, then this condition is true. Otherwise, if all 4 checked locations do not satisfy the child condition, then this condition is false.")
-            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS)
-            .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDER_CONDITIONS, "Input BiomeProviderCondition.")
-            .addCategory(CATEGORY_BIOME_PROVIDERS);
     public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_AND = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("And", "And BiomeProviderCondition"))
             .withDescription("Checks if all child conditions (Inputs) are true. If all child conditions are true, then this condition is true. Otherwise, if at least 1 child condition fails, then this condition is false.\n" +
                     "The order of child conditions for this condition can matter. Because child conditions are only checked up until the first failing condition, less expensive conditions should be placed above more expensive conditions.")
             .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS)
             .addVariantOutput("Inputs", "Inputs", true, VARIANT_BIOME_PROVIDER_CONDITIONS, "Input BiomeProviderConditions.")
-            .addCategory(CATEGORY_BIOME_PROVIDERS);
-    public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_DENSITY_DISTANCE = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("DensityDistance", "DensityDistance BiomeProviderCondition"))
-            .withDescription("Checks if any location within a certain distance, derived from the child Density input, matches the child condition (Input).\n" +
-                    "If at least 1 location within the distance matches the child condition, then this condition is true. Otherwise, if no nearby locations match the child condition, then this condition is false.\n" +
-                    "To determine the checked distance, this node evaluates its Density child once at the location of the original check. Then, it maps that density output so that -1 maps to the MinDistance and 1 maps to the MaxDistance. This mapped value is used as the distance to check." +
-                    "This condition may check its child condition on nearby locations hundreds of times (or more) depending on the given distance, so this node can be very expensive. To mitigate this, caching is used to reduce the amount of checks that need to be done.\n" +
-                    "Still, this node should be used as little as possible, especially with large (>16 blocks) distances.")
-            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS)
-            .addContent(Renode.floatContent("MinDistance", "MinDistance").withDefaultValue(0.0).withWidth(50))
-            .addContent(Renode.floatContent("MaxDistance", "MaxDistance").withDefaultValue(0.0).withWidth(50))
-            .addVariantOutput("Density", "Density", false, HytaleGeneratorNodes.VARIANT_DENSITY, "Input Density, which determines the distance to check.")
-            .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDER_CONDITIONS, "Input BiomeProviderCondition.")
-            .addCategory(CATEGORY_BIOME_PROVIDERS);
-    public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_DISTANCE = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("Distance", "Distance BiomeProviderCondition"))
-            .withDescription("Checks if any location within a specified Distance (in blocks) of the current location matches the child condition (Input).\n" +
-                    "If at least 1 location within the distance matches the child condition, then this condition is true. Otherwise, if no nearby locations match the child condition, then this condition is false.\n" +
-                    "This condition may check its child condition on nearby locations hundreds of times (or more) depending on the given distance, so this node can be very expensive. To mitigate this, caching is used to reduce the amount of checks that need to be done.\n" +
-                    "Still, this node should be used as little as possible, especially with large (>16 blocks) distances.")
-            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS)
-            .addContent(Renode.floatContent("Distance", "Distance").withDefaultValue(1.0).withWidth(50))
-            .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDER_CONDITIONS, "Input BiomeProviderCondition.")
             .addCategory(CATEGORY_BIOME_PROVIDERS);
     public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_FIELD_FUNCTION = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("FieldFunction", "FieldFunction BiomeProviderCondition"))
             .withDescription("Checks if a child Density field is within a specified range (Minimum -> Maximum) at the given location.\n" +
@@ -112,6 +86,13 @@ public class RenodeIntegration {
                     "The order of child conditions for this condition can matter. Because child conditions are only checked up until the first matching condition, less expensive conditions should be placed above more expensive conditions.")
             .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS)
             .addVariantOutput("Inputs", "Inputs", true, VARIANT_BIOME_PROVIDER_CONDITIONS, "Input BiomeProviderConditions.")
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_SCANNER = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("Scanner", "Scanner BiomeProviderCondition"))
+            .withDescription("Checks nearby locations against an input BiomeProviderCondition, with the locations being provided by a BiomeProviderScanner.\n" +
+                    "If any checked locations match the input condition, then this condition returns true. If no checked locations match the input condition, then this condition returns false.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS)
+            .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDER_CONDITIONS, "Input BiomeProviderCondition.")
+            .addVariantOutput("Scanner", "Scanner", false, VARIANT_BIOME_PROVIDER_SCANNERS, "Scanner to use.")
             .addCategory(CATEGORY_BIOME_PROVIDERS);
     public static final NodeBuilder NODE_BIOME_PROVIDER_CONDITION_SUM_RANGE = addNode(VARIANT_BIOME_PROVIDER_CONDITIONS.variantNode("SumRange", "SumRange BiomeProviderCondition"))
             .withDescription("Adds up the number of matching child conditions (Inputs), and checks if that sum is within a given range (Minimum to Maximum).\n" +
@@ -283,15 +264,51 @@ public class RenodeIntegration {
             .addContent(Renode.checkboxContent("Rounding", "GridAlign").withDefaultValue(true).withDescription("Whether to align the scaled position to the grid. Should be left as true if you aren't sure whether to use or not."))
             .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDERS, "Input BiomeProvider.")
             .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_ADJACENT_2D = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("Adjacent2D", "Adjacent2D BiomeProviderScanner"))
+            .withDescription("Scans locations directly adjacent to the input location in 2D.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_DENSITY_ROUND_2D = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("DensityRound2D", "DensityRound2D BiomeProviderScanner"))
+            .withDescription("Scans locations within a radius of the input locations in 2D, with the radius being determined by a Density function, a Min Radius, and a Max Radius.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
+            .addContent(Renode.floatContent("MinRadius", "Min Radius").withDefaultValue(0.0).withWidth(200).withDescription("Minimum radius to use, when the Density function equals -1."))
+            .addContent(Renode.floatContent("MaxRadius", "Max Radius").withDefaultValue(1.0).withWidth(200).withDescription("Maximum radius to use, when the Density function equals 1."))
+            .addVariantOutput("Density", "Density", false, HytaleGeneratorNodes.VARIANT_DENSITY, "Input Density used to determine the radius. A value of -1 corresponds to the Min Radius, and 1 corresponds to the Max Radius.")
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_IMPORTED = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("Imported", "Imported BiomeProviderScanner"))
+            .withDescription("Imports an exported BiomeProviderScanner asset.")
+            .addContent(HytaleGeneratorNodes.CONTENT_SKIP)
+            .addContent(Renode.smallStringContent("Name", "Name").withDefaultValue("").withWidth(250).withDescription("The exported BiomeProviderScanner asset."))
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_OFFSET = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("Offset", "Offset BiomeProviderScanner"))
+            .withDescription("Offsets an input BiomeProviderScanner by a given Offset vector.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
+            .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDER_SCANNERS, "The Input BiomeProviderScanner to offset.")
+            .addNodeOutput("Offset", "Offset", false, HytaleGeneratorNodes.NODE_POINT_3D, "The offset to use.")
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_ORIGIN = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("Origin", "Origin BiomeProviderScanner"))
+            .withDescription("Scans only the input location.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_ROUND_2D = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("Round2D", "Round2D BiomeProviderScanner"))
+            .withDescription("Scans locations within a fixed radius of the input locations in 2D.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
+            .addContent(Renode.floatContent("Radius", "Radius").withDefaultValue(1.0).withWidth(200).withDescription("Scanning radius."))
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
+    public static final NodeBuilder NODE_BIOME_PROVIDER_SCANNER_UNION = addNode(VARIANT_BIOME_PROVIDER_SCANNERS.variantNode("Union", "Union BiomeProviderScanner"))
+            .withDescription("Scans all locations scanned by the input BiomeProviderScanners, in order.")
+            .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
+            .addVariantOutput("Inputs", "Inputs", false, VARIANT_BIOME_PROVIDER_SCANNERS, "The Input BiomeProviderScanners.")
+            .addCategory(CATEGORY_BIOME_PROVIDERS);
     public static final NodeBuilder NODE_BIOME_PROVIDER_SMOOTHED = addNode(VARIANT_BIOME_PROVIDERS.variantNode("Smoothed", "Smoothed BiomeProvider"))
-            .withDescription("Applies a smoothing filter to the child (input) BiomeProvider, by sampling all biome values in a given radius and using the most common one, as long as its prevalence is above a certain threshold.\n" +
+            .withDescription("Applies a smoothing filter to the child (input) BiomeProvider, by sampling all biome values using a given BiomeProviderScanner and picking the most common one, as long as its prevalence is above a certain threshold.\n" +
                     "This BiomeProvider can be very expensive, as it samples the input many times per sample of this node. To mitigate this, caching is used to reduce the amount of checks that need to be done.\n" +
-                    "Still, you should use this node as little as possible, especially with large (>16) Radius values.\n" +
+                    "Still, you should use this node as little as possible, especially with large (>16) Radiuses.\n" +
                     "If not specified, the Input and Fallback fall back to the Previous BiomeProvider (see Staged/Previous BiomeProviders).")
             .addContent(HytaleGeneratorNodes.CONTENT_EXPORT_AS, HytaleGeneratorNodes.CONTENT_SKIP)
-            .addContent(Renode.floatContent("Radius", "Radius").withDefaultValue(5.0).withWidth(50).withDescription("The radius to use for the smoothing pass."))
             .addContent(Renode.floatContent("Threshold", "Threshold").withDefaultValue(0.5).withWidth(50).withDescription("The threshold value to use for smoothing. The smoothing will only be applied if the most common Biome is at least this threshold times the total number of samples."))
             .addVariantOutput("Input", "Input", false, VARIANT_BIOME_PROVIDERS, "Input BiomeProvider.")
+            .addVariantOutput("Scanner", "Scanner", false, VARIANT_BIOME_PROVIDER_SCANNERS, "Scanner to use.")
             .addVariantOutput("Fallback", "Fallback", false, VARIANT_BIOME_PROVIDERS, "Fallback BiomeProvider, if the threshold check does not pass.")
             .addCategory(CATEGORY_BIOME_PROVIDERS);
     public static final NodeBuilder NODE_BIOME_PROVIDER_STAGED = addNode(VARIANT_BIOME_PROVIDERS.variantNode("Staged", "Staged BiomeProvider"))
@@ -341,6 +358,7 @@ public class RenodeIntegration {
 
     public static final AbstractNodeRoot ROOT_BIOME_PROVIDERS = addRoot(Renode.root(VARIANT_BIOME_PROVIDERS, "HytaleGenerator (Carta) - BiomeProvider"));
     public static final AbstractNodeRoot ROOT_BIOME_PROVIDER_CONDITIONS = addRoot(Renode.root(VARIANT_BIOME_PROVIDER_CONDITIONS, "HytaleGenerator (Carta) - BiomeProviderCondition"));
+    public static final AbstractNodeRoot ROOT_BIOME_PROVIDER_SCANNERS = addRoot(Renode.root(VARIANT_BIOME_PROVIDER_SCANNERS, "HytaleGenerator (Carta) - BiomeProviderScanner"));
 
     private static NodeBuilder addNode(NodeBuilder node) {
         nodes.add(node);
