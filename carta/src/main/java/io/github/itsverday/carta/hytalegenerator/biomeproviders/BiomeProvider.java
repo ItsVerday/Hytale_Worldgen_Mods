@@ -1,7 +1,6 @@
 package io.github.itsverday.carta.hytalegenerator.biomeproviders;
 
 import com.hypixel.hytale.builtin.hytalegenerator.workerindexer.WorkerIndexer;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.CachedBiomeProvider;
 import org.joml.Vector3d;
 
 import javax.annotation.Nonnull;

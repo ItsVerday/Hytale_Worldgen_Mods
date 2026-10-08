@@ -1,7 +1,7 @@
 package io.github.itsverday.carta;
 
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.ImageMap2DBiomeProvider;
+import io.github.itsverday.carta.hytalegenerator.biomeproviders.ImageMap2DBiomeProvider;
 import io.github.itsverday.renode.builder.NodeBuilder;
 import io.github.itsverday.renode.builder.NodeCategory;
 import io.github.itsverday.renode.builder.NodeVariantClass;

@@ -1,0 +1,25 @@
+package io.github.itsverday.carta.hytalegenerator.biomeproviderconditions;
+
+import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
+import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+
+public class AndBiomeProviderCondition extends BiomeProviderCondition {
+    @Nonnull
+    private final List<BiomeProviderCondition> inputs;
+
+    public AndBiomeProviderCondition(@Nonnull List<BiomeProviderCondition> inputs) {
+        this.inputs = inputs;
+    }
+
+    @Override
+    public boolean process(@NonNullDecl BiomeProvider.Context context) {
+        for (BiomeProviderCondition input: inputs) {
+            if (!input.process(context)) return false;
+        }
+
+        return true;
+    }
+}
