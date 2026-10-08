@@ -26,23 +26,6 @@ public class ScannerBiomeProviderCondition extends BiomeProviderCondition {
     private final boolean[] rReturn = new boolean[1];
 
     private BiomeProvider.Context rContext;
-    private final Pipe.One<Vector3d> rChildPipe = new Pipe.One<>() {
-        @Override
-        public void accept(@NonNullDecl Vector3d offset, @NonNullDecl Control control) {
-            rPosition.set(rContext.position.x + offset.x, rContext.position.y + offset.y, rContext.position.z + offset.z);
-            boolean scanResult = scanCache.getOrCompute(rPosition.x, rPosition.z, () -> {
-                rBiomeProviderContext.assign(rContext);
-                rBiomeProviderContext.position = rPosition;
-                return input.process(rBiomeProviderContext);
-            });
-
-            if (scanResult) {
-                rReturn[0] = true;
-                control.stop = true;
-            }
-        }
-    };
-
     public ScannerBiomeProviderCondition(@Nonnull BiomeProviderCondition input, @Nonnull BiomeProviderScanner scanner) {
         this.input = input;
         this.scanner = scanner;
@@ -57,11 +40,25 @@ public class ScannerBiomeProviderCondition extends BiomeProviderCondition {
 
         return resultCache.getOrCompute(x, z, () -> {
             rBiomeScannerContext.origin.set(rContext.position);
-            rBiomeScannerContext.pipe = rChildPipe;
+            rBiomeScannerContext.pipe = this::processOffset;
 
             rReturn[0] = false;
             scanner.generate(rBiomeScannerContext);
             return rReturn[0];
         });
+    }
+
+    public void processOffset(@NonNullDecl Vector3d offset, @NonNullDecl Control control) {
+        rPosition.set(rContext.position.x + offset.x, rContext.position.y + offset.y, rContext.position.z + offset.z);
+        boolean scanResult = scanCache.getOrCompute(rPosition.x, rPosition.z, () -> {
+            rBiomeProviderContext.assign(rContext);
+            rBiomeProviderContext.position = rPosition;
+            return input.process(rBiomeProviderContext);
+        });
+
+        if (scanResult) {
+            rReturn[0] = true;
+            control.stop = true;
+        }
     }
 }

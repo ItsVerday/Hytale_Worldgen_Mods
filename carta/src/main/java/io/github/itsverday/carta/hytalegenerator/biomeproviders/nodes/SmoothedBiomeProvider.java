@@ -1,7 +1,6 @@
 package io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes;
 
 import com.hypixel.hytale.builtin.hytalegenerator.pipe.Control;
-import com.hypixel.hytale.builtin.hytalegenerator.pipe.Pipe;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.BiomeProvider;
 import io.github.itsverday.carta.hytalegenerator.biomeproviders.nodes.scanners.BiomeProviderScanner;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -31,23 +30,6 @@ public class SmoothedBiomeProvider extends BiomeProvider {
     private int rTotalCount = 0;
     private Integer rReturn = null;
     private Context rContext;
-    private final Pipe.One<Vector3d> rChildPipe = new Pipe.One<>() {
-        @Override
-        public void accept(@NonNullDecl Vector3d offset, @NonNullDecl Control control) {
-            rPosition.set(rContext.position.x + offset.x, rContext.position.y + offset.y, rContext.position.z + offset.z);
-            int value = input.process(rChildContext);
-            int currentCount = rCounts.get(value) + 1;
-            if (threshold >= 0.5 && currentCount > totalThreshold) {
-                control.stop = true;
-                rReturn = value;
-                return;
-            }
-
-            rCounts.put(value, currentCount);
-            rHighestCount = Math.max(rHighestCount, currentCount);
-            rTotalCount++;
-        }
-    };
 
     public SmoothedBiomeProvider(@Nonnull BiomeProvider input, @Nonnull BiomeProvider fallback, @Nonnull BiomeProviderScanner scanner, double threshold) {
         this.input = input;
@@ -69,7 +51,7 @@ public class SmoothedBiomeProvider extends BiomeProvider {
         rChildContext.position = rPosition;
 
         rBiomeScannerContext.origin.set(context.position);
-        rBiomeScannerContext.pipe = rChildPipe;
+        rBiomeScannerContext.pipe = this::processOffset;
         scanner.generate(rBiomeScannerContext);
 
         if (rReturn != null) return rReturn;
@@ -84,6 +66,21 @@ public class SmoothedBiomeProvider extends BiomeProvider {
         }
 
         return fallback.process(context);
+    }
+
+    private void processOffset(@NonNullDecl Vector3d offset, @NonNullDecl Control control) {
+        rPosition.set(rContext.position.x + offset.x, rContext.position.y + offset.y, rContext.position.z + offset.z);
+        int value = input.process(rChildContext);
+        int currentCount = rCounts.get(value) + 1;
+        if (threshold >= 0.5 && currentCount > totalThreshold) {
+            control.stop = true;
+            rReturn = value;
+            return;
+        }
+
+        rCounts.put(value, currentCount);
+        rHighestCount = Math.max(rHighestCount, currentCount);
+        rTotalCount++;
     }
 
     @Override
