@@ -15,17 +15,10 @@ public class OffsetBiomeProviderScanner extends BiomeProviderScanner {
     private final BiomeProviderScanner input;
 
     @Nonnull
-    private final Context rChildContext = new Context();
+    private final Vector3d rOffset = new Vector3d();
     private Context rContext;
-
     @Nonnull
-    private final Pipe.One<Vector3d> rChildPipe = new Pipe.One<Vector3d>() {
-        @Override
-        public void accept(@NonNullDecl Vector3d providedOffset, @NonNullDecl Control control) {
-            providedOffset.add(offset);
-            rContext.pipe.accept(providedOffset, control);
-        }
-    };
+    private final Context rChildContext = new Context();
 
     public OffsetBiomeProviderScanner(@Nonnull Vector3d offset, @Nonnull BiomeProviderScanner input) {
         this.offset = new Vector3d(offset);
@@ -37,8 +30,14 @@ public class OffsetBiomeProviderScanner extends BiomeProviderScanner {
         rContext = context;
 
         rChildContext.assign(context);
-        rChildContext.pipe = rChildPipe;
+        rChildContext.pipe = this::accept;
 
         input.generate(rChildContext);
+    }
+
+    private void accept(@NonNullDecl Vector3d providedOffset, @NonNullDecl Control control) {
+        rOffset.set(providedOffset);
+        rOffset.add(offset);
+        rContext.pipe.accept(rOffset, control);
     }
 }

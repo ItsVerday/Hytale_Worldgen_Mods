@@ -37,8 +37,8 @@ public class UnionBiomeProviderScanner extends BiomeProviderScanner {
         }
     }
 
-    private void accept(Vector3d offset, Control control) {
-        rContext.pipe.accept(offset, control);
+    private void accept(Vector3d providedOffset, Control control) {
+        rContext.pipe.accept(providedOffset, control);
         rIsStopped |= control.stop;
     }
 }
