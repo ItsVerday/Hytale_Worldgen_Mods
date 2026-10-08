@@ -108,6 +108,12 @@ public class ImageMap2DBiomeProvider extends BiomeProvider {
             }
         }
 
+        for (Integer value: fallback.allPossibleValues()) {
+            if (!values.contains(value)) {
+                values.add(value);
+            }
+        }
+
         return values;
     }
 
