@@ -231,10 +231,9 @@ public abstract class BiomeProviderAsset implements Cleanable, JsonAssetWithMap<
             for (int i = stageLabels.size() - 1; i >= 0; i--) {
                 StagedBiomeProviderLabel label = stageLabels.get(i);
                 if (stageLabel == null || stageLabel.equals(label.label)) return label.biomeProvider;
-                return stageLabels.getFirst().biomeProvider;
             }
 
-            return null;
+            return stageLabels.getFirst().biomeProvider;
         }
 
         public static class StagedBiomeProviderLabel {
