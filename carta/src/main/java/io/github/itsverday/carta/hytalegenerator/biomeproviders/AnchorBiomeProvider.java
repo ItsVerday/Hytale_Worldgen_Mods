@@ -39,4 +39,9 @@ public class AnchorBiomeProvider extends BiomeProvider {
     public List<Integer> allPossibleValues() {
         return input.allPossibleValues();
     }
+
+    @Override
+    public boolean shouldCache() {
+        return false;
+    }
 }
