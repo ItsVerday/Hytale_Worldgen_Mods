@@ -18,7 +18,6 @@ public class SmoothedBiomeProvider extends BiomeProvider {
     @Nonnull
     private final BiomeProviderScanner scanner;
     private final double threshold;
-    private double totalThreshold = Double.MAX_VALUE;
 
     private final Int2IntOpenHashMap rCounts = new Int2IntOpenHashMap();
     private final Vector3d rPosition = new Vector3d();
@@ -27,7 +26,6 @@ public class SmoothedBiomeProvider extends BiomeProvider {
 
     private int rHighestCount = 0;
     private int rTotalCount = 0;
-    private Integer rReturn = null;
     private Context rContext;
 
     public SmoothedBiomeProvider(@Nonnull BiomeProvider input, @Nonnull BiomeProvider fallback, @Nonnull BiomeProviderScanner scanner, double threshold) {
@@ -43,7 +41,6 @@ public class SmoothedBiomeProvider extends BiomeProvider {
     public int process(@NonNullDecl Context context) {
         rHighestCount = 0;
         rTotalCount = 0;
-        rReturn = null;
         rCounts.clear();
         rContext = context;
         rChildContext.assign(context);
@@ -53,9 +50,7 @@ public class SmoothedBiomeProvider extends BiomeProvider {
         rBiomeScannerContext.pipe = this::processOffset;
         scanner.generate(rBiomeScannerContext);
 
-        if (rReturn != null) return rReturn;
-        if (totalThreshold == Double.MAX_VALUE) totalThreshold = rTotalCount * threshold;
-
+        double totalThreshold = rTotalCount * threshold;
         for (int value: rCounts.keySet()) {
             int count = rCounts.get(value);
             if (count == rHighestCount) {
@@ -71,11 +66,6 @@ public class SmoothedBiomeProvider extends BiomeProvider {
         rPosition.set(rContext.position.x + offset.x, rContext.position.y + offset.y, rContext.position.z + offset.z);
         int value = input.process(rChildContext);
         int currentCount = rCounts.get(value) + 1;
-        if (threshold >= 0.5 && currentCount > totalThreshold) {
-            control.stop = true;
-            rReturn = value;
-            return;
-        }
 
         rCounts.put(value, currentCount);
         rHighestCount = Math.max(rHighestCount, currentCount);
