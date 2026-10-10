@@ -44,6 +44,7 @@ public class ConditionalBiomeProviderAsset extends BiomeProviderAsset {
     public BiomeProvider build(@NonNullDecl Argument argument) {
         if (isSkipped()) return null;
         if (conditionAsset == null) return null;
+        if (ifTrueAsset == null && ifFalseAsset == null) return null;
 
         BiomeProviderCondition condition = conditionAsset.build(argument);
         BiomeProvider ifTrue = BiomeProviderAsset.buildStatic(ifTrueAsset, argument, false);
